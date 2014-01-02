@@ -3,7 +3,7 @@
 //  w3action
 //
 //  Created by KH Kim on 2013. 12. 30..
-//  Copyright (c) 2013년 KH Kim. All rights reserved.
+//  Copyright (c) 2013 KH Kim. All rights reserved.
 //
 
 /*

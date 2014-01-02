@@ -1,2 +1,4 @@
 platform :ios
 pod 'JSONKit'
+
+podspec :podspect => "../w3action.podspec"
