@@ -63,24 +63,20 @@ typedef int HTTPActionServiceState;
 
 + (HTTPActionManager *)sharedInstance;
 - (NSString *)actionPlistNameWithServiceState;
-- (NSString *)stringWithServiceState;
 - (NSDictionary *)actionWith:(NSString *)actionId;
-- (BOOL)contains:(NSString *)actionId;
-- (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param target:(id)target success:(SEL)success error:(SEL)error;
-- (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param success:(void (^)(NSData *result))success error:(void (^)(NSError *error))error;
-- (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body target:(id)target success:(SEL)success error:(SEL)error;
-- (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body success:(void (^)(NSData *result))success error:(void (^)(NSError *error))error;
-- (BOOL)doActionWithRequest:(HTTPRequestObject *)request target:(id)target success:(SEL)success error:(SEL)error;
-- (BOOL)doActionWithRequest:(HTTPRequestObject *)request success:(void (^)(NSData *result))success error:(void (^)(NSError *error))error;
 - (void)clearPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName;
+- (BOOL)contains:(NSString *)actionId;
+- (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error;
+- (BOOL)doActionWithRequest:(HTTPRequestObject *)request;
 - (void)loadPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName;
 - (HTTPRequestObject *)objectWithData:(NSData *)data;
+- (NSString *)stringWithServiceState;
 @end
 
 // ================================================================================================
-//  Category NSBundle (com_pisces_com_w3action)
+//  Category NSBundle (com_pisces_lib_w3action)
 // ================================================================================================
 
-@interface NSBundle (com_pisces_com_w3action)
+@interface NSBundle (com_pisces_lib_w3action)
 - (NSDictionary *)dictionaryWithPlistName:(NSString*)plistName;
 @end

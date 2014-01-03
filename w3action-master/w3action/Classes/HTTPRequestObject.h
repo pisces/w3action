@@ -29,18 +29,13 @@ typedef void (^ErrorBlock)(NSError *error);
 
 @interface HTTPRequestObject : NSObject
 @property(nonatomic, retain) NSDictionary *action;
-@property(nonatomic, retain) NSDictionary *body;
+@property(nonatomic, retain) id body;
+@property(nonatomic, retain) NSDictionary *header;
 @property(nonatomic, retain) NSObject *param;
 @property(nonatomic, readonly, retain) NSString *paramString;
-@property(nonatomic, retain) id target;
-@property(nonatomic) SEL success;
-@property(nonatomic) SEL error;
 @property(nonatomic, copy) SuccessBlock successBlock;
 @property(nonatomic, copy) ErrorBlock errorBlock;
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param;
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body;
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body target:(id)target success:(SEL)success error:(SEL)error;
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param target:(id)target success:(SEL)success error:(SEL)error;
++ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error;
 - (NSString *)paramWithUTF8StringEncoding;
 @end
 

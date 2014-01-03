@@ -26,83 +26,53 @@
 
 @implementation HTTPRequestObject
     
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param
-{
-        HTTPRequestObject *instance = [[HTTPRequestObject alloc] init];
-        instance.action = action;
-        instance.param = param;
-        return instance;
-}
-
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body
++ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error
 {
         HTTPRequestObject *instance = [[HTTPRequestObject alloc] init];
         instance.action = action;
         instance.body = body;
         instance.param = param;
-        return instance;
-}
-    
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param target:(id)target success:(SEL)success error:(SEL)error
-{
-        HTTPRequestObject *instance = [[HTTPRequestObject alloc] init];
-        instance.action = action;
-        instance.param = param;
-        instance.target = target;
-        instance.success = success;
-        instance.error = error;
-        return instance;
-}
-    
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body target:(id)target success:(SEL)success error:(SEL)error
-{
-        HTTPRequestObject *instance = [[HTTPRequestObject alloc] init];
-        instance.action = action;
-        instance.body = body;
-        instance.param = param;
-        instance.target = target;
-        instance.success = success;
-        instance.error = error;
+        instance.header = header;
+        instance.successBlock = success;
+        instance.errorBlock = error;
         return instance;
 }
     
 - (void)dealloc
 {
-        _action = nil;
-        _body = nil;
-        _param = nil;
-        _paramString = nil;
-        _target = nil;
-        _success = nil;
-        _error = nil;
+    _action = nil;
+    _body = nil;
+    _header = nil;
+    _param = nil;
+    _paramString = nil;
 }
-    
+
 - (NSString *)paramWithUTF8StringEncoding
-    {
-        return [_paramString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    }
-    
+{
+    return [_paramString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+}
+
 - (void)setParam:(NSObject *)param
-    {
-        if ([param isEqual:_param])
+{
+    if ([param isEqual:_param])
         return;
-        
-        _param = nil;
-        _paramString = nil;
-        
-        if (!param)
+    
+    _param = nil;
+    _paramString = nil;
+    
+    if (!param)
         return;
-        
-        _param = param;
-        
-        if ([_param isKindOfClass:[NSString class]]) {
-            _paramString = (NSString *) _param;
-        } else if ([_param isKindOfClass:[NSDictionary class]]) {
-            NSDictionary *dic = (NSDictionary *) _param;
-            _paramString = [dic urlString];
-        }
+    
+    _param = param;
+    
+    if ([_param isKindOfClass:[NSString class]]) {
+        _paramString = (NSString *) _param;
+    } else if ([_param isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *dic = (NSDictionary *) _param;
+        _paramString = [dic urlString];
     }
-    @end
+}
+@end
 
 // ================================================================================================
 //  Implementation NSDictionary (com_pisces_com_KnitNet)
@@ -110,15 +80,15 @@
 
 @implementation NSDictionary (com_pisces_com_KnitNet)
 
-    static NSString *toString(id object) {
-        return [NSString stringWithFormat: @"%@", object];
-    }
-    
-    static NSString *urlEncode(id object) {
-        NSString *string = toString(object);
-        return [string stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
-    }
-    
+static NSString *toString(id object) {
+    return [NSString stringWithFormat: @"%@", object];
+}
+
+static NSString *urlEncode(id object) {
+    NSString *string = toString(object);
+    return [string stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+}
+
 - (NSString *)urlEncodedString
 {
     NSMutableArray *parts = [NSMutableArray array];
@@ -129,7 +99,7 @@
     }
     return [parts componentsJoinedByString:@"&"];
 }
-    
+
 - (NSString *)urlString
 {
     NSMutableArray *parts = [NSMutableArray array];
