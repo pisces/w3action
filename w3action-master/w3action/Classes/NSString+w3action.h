@@ -1,8 +1,8 @@
 //
-//  w3action.h
+//  NSString+w3action.h
 //  w3action
 //
-//  Created by KH Kim on 2013. 12. 31..
+//  Created by KH Kim on 2013. 12. 30..
 //  Copyright (c) 2013 KH Kim. All rights reserved.
 //
 
@@ -23,8 +23,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "HTTPActionManager.h"
-#import "NSString+w3action.h"
 
-@interface w3action : NSObject
+@interface NSString (w3action)
+- (NSDictionary *)urlParameters;
 @end
