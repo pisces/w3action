@@ -24,7 +24,7 @@
 
 #import "NSString+w3action.h"
 
-@implementation NSString (w3action)
+@implementation NSString (org_apache_w3action_NSString)
 - (NSDictionary *)urlParameters
 {
     NSMutableDictionary *result = [NSMutableDictionary dictionary];

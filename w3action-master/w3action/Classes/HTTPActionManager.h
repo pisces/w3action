@@ -74,9 +74,9 @@ typedef int HTTPActionServiceState;
 @end
 
 // ================================================================================================
-//  Category NSBundle (com_pisces_lib_w3action)
+//  Category NSBundle (org_apache_w3action_NSBundle)
 // ================================================================================================
 
-@interface NSBundle (com_pisces_lib_w3action)
+@interface NSBundle (org_apache_w3action_NSBundle)
 - (NSDictionary *)dictionaryWithPlistName:(NSString*)plistName;
 @end

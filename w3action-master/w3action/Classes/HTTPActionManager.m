@@ -24,6 +24,12 @@
 
 #import "HTTPActionManager.h"
 
+// ================================================================================================
+//
+//  Implementation: HTTPActionManager
+//
+// ================================================================================================
+
 @implementation HTTPActionManager
 {
 @private
@@ -357,10 +363,12 @@ static HTTPActionManager *uniqueInstance;
 @end
 
 // ================================================================================================
-//  Implementation NSBundle (com_pisces_com_w3action)
+//
+//  Category: NSBundle (org_apache_w3action_NSBundle)
+//
 // ================================================================================================
 
-@implementation NSBundle (com_pisces_com_w3action)
+@implementation NSBundle (org_apache_w3action_NSBundle)
 - (NSDictionary *)dictionaryWithPlistName:(NSString*)plistName
 {
     NSError *error = nil;

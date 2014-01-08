@@ -24,6 +24,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (w3action)
+@interface NSString (org_apache_w3action_NSString)
 - (NSDictionary *)urlParameters;
 @end
