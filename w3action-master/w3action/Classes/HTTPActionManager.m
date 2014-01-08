@@ -59,7 +59,7 @@ static HTTPActionManager *uniqueInstance;
 
 - (void)dealloc
 {
-    _headers = nil;
+    _header = nil;
     actionPlist = nil;
     actionPlistDictionary = nil;
     requestObjectDic = nil;
@@ -235,10 +235,10 @@ static HTTPActionManager *uniqueInstance;
     
     [request setHTTPMethod:method];
     
-    if (_headers)
+    if (_header)
     {
-        for (NSString *key in _headers)
-            [request setValue:[_headers objectForKey:key] forHTTPHeaderField:key];
+        for (NSString *key in _header)
+            [request setValue:[_header objectForKey:key] forHTTPHeaderField:key];
     }
     
     if (object.header)
@@ -248,7 +248,7 @@ static HTTPActionManager *uniqueInstance;
     }
     
 #if HTTPLogEnabled
-    NSLog(@"\nRequest Start -----------------------------------------\nurl -> %@,\n contentType -> %@,\n method -> %@,\n headers -> %@,\n param -> %@", orgUrl, contentType, method, request.allHTTPHeaderFields, object.param);
+    NSLog(@"\nRequest Start -----------------------------------------\nurl -> %@,\n contentType -> %@,\n method -> %@,\n header -> %@,\n param -> %@", orgUrl, contentType, method, request.allHTTPHeaderFields, object.param);
 #endif
     
     if ([contentType isEqualToString:ContentTypeMultipartFormData])

@@ -59,7 +59,7 @@ typedef int HTTPActionServiceState;
 @property (nonatomic) NSTimeInterval timeInterval;
 @property (nonatomic) HTTPActionServiceState serviceState;
 @property (nonatomic, retain) NSString *plistName;
-@property (nonatomic, retain) NSDictionary *headers;
+@property (nonatomic, retain) NSDictionary *header;
 
 + (HTTPActionManager *)sharedInstance;
 - (NSString *)actionPlistNameWithServiceState;
