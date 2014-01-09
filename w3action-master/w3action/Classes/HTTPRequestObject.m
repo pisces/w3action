@@ -24,20 +24,34 @@
 
 #import "HTTPRequestObject.h"
 
+// ================================================================================================
+//
+//  Implementation: HTTPRequestObject
+//
+// ================================================================================================
+
 @implementation HTTPRequestObject
-    
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error
+
+// ================================================================================================
+//  Class method
+// ================================================================================================
+
++ (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error
 {
-        HTTPRequestObject *instance = [[HTTPRequestObject alloc] init];
-        instance.action = action;
-        instance.body = body;
-        instance.param = param;
-        instance.header = header;
-        instance.successBlock = success;
-        instance.errorBlock = error;
-        return instance;
+    HTTPRequestObject *instance = [[HTTPRequestObject alloc] init];
+    instance.action = action;
+    instance.body = body;
+    instance.param = param;
+    instance.header = header;
+    instance.successBlock = success;
+    instance.errorBlock = error;
+    return instance;
 }
-    
+
+// ================================================================================================
+//  Overridden: NSObject
+// ================================================================================================
+
 - (void)dealloc
 {
     _action = nil;
@@ -46,6 +60,10 @@
     _param = nil;
     _paramString = nil;
 }
+
+// ================================================================================================
+//  Public
+// ================================================================================================
 
 - (NSString *)paramWithUTF8StringEncoding
 {
@@ -75,7 +93,9 @@
 @end
 
 // ================================================================================================
-//  Implementation NSDictionary (com_pisces_com_KnitNet)
+//
+//  Implementation: NSDictionary (org_apache_w3action_NSDictionary)
+//
 // ================================================================================================
 
 @implementation NSDictionary (com_pisces_com_KnitNet)
@@ -109,5 +129,21 @@ static NSString *urlEncode(id object) {
         [parts addObject:part];
     }
     return [parts componentsJoinedByString:@"&"];
+}
+@end
+
+// ================================================================================================
+//
+//  Implementation: MultipartFormDataObject
+//
+// ================================================================================================
+
+@implementation MultipartFormDataObject
++ (MultipartFormDataObject *)objectWithFilename:(NSString *)filename data:(NSData *)data
+{
+    MultipartFormDataObject *object = [[MultipartFormDataObject alloc] init];
+    object.filename = filename;
+    object.data = data;
+    return object;
 }
 @end

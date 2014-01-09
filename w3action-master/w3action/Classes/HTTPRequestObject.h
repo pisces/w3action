@@ -27,7 +27,7 @@
 typedef void (^SuccessBlock)(NSData *result);
 typedef void (^ErrorBlock)(NSError *error);
 
-@interface HTTPRequestObject : NSObject
+@interface HTTPRequestObject : NSObject <NSURLConnectionDelegate>
 @property(nonatomic, retain) NSDictionary *action;
 @property(nonatomic, retain) id body;
 @property(nonatomic, retain) NSDictionary *header;
@@ -35,15 +35,17 @@ typedef void (^ErrorBlock)(NSError *error);
 @property(nonatomic, readonly, retain) NSString *paramString;
 @property(nonatomic, copy) SuccessBlock successBlock;
 @property(nonatomic, copy) ErrorBlock errorBlock;
-+ (HTTPRequestObject *)createWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error;
++ (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error;
 - (NSString *)paramWithUTF8StringEncoding;
 @end
 
-// ================================================================================================
-//  Category NSDictionary (com_pisces_com_KnitNet)
-// ================================================================================================
-
-@interface NSDictionary (com_pisces_com_KnitNet)
+@interface NSDictionary (org_apache_w3action_NSDictionary)
 - (NSString *)urlEncodedString;
 - (NSString *)urlString;
+@end
+
+@interface MultipartFormDataObject : NSObject
+@property (nonatomic, retain) NSString *filename;
+@property (nonatomic, retain) NSData *data;
++ (MultipartFormDataObject *)objectWithFilename:(NSString *)filename data:(NSData *)data;
 @end

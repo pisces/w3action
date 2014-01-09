@@ -27,14 +27,16 @@
 #import "JSONKit.h"
 #import "HTTPRequestObject.h"
 #import "NSData+Extensions.h"
-#import "MultipartFormDataObject.h"
+
+// ================================================================================================
+//  Enum
+// ================================================================================================
 
 enum {
     HTTPActionServiceStateDisabled = 0,
     HTTPActionServiceStateLive = 1,
     HTTPActionServiceStateDev = 2,
-    HTTPActionServiceStateQA = 3,
-    HTTPActionServiceStateSM = 4
+    HTTPActionServiceStateQA = 3
 };
 typedef int HTTPActionServiceState;
 
@@ -42,18 +44,28 @@ typedef int HTTPActionServiceState;
 //  Define
 // ================================================================================================
 
-#define HTTP_METHOD_GET @"GET"
-#define HTTP_METHOD_POST @"POST"
 #define ContentTypeApplicationJSON @"application/json"
 #define ContentTypeApplicationXML @"application/xml"
 #define ContentTypeApplicationXWWWFormURLEncoded @"application/x-www-form-urlencoded"
 #define ContentTypeMultipartFormData @"multipart/form-data"
+#define HTTP_METHOD_GET @"GET"
+#define HTTP_METHOD_POST @"POST"
+
+// ================================================================================================
+//  NSURLObject
+// ================================================================================================
+
+@interface NSURLObject : NSObject
+@property (nonatomic, retain) NSURLRequest *request;
+@property (nonatomic, retain) NSHTTPURLResponse *response;
++ (NSURLObject *)objectWithRequest:(NSURLRequest *)request response:(NSHTTPURLResponse *)response;
+@end
 
 // ================================================================================================
 //  Interface HTTPActionManager
 // ================================================================================================
 
-@interface HTTPActionManager : NSObject
+@interface HTTPActionManager : NSObject <NSURLConnectionDelegate>
 @property (nonatomic) BOOL async;
 @property (nonatomic) BOOL useNetworkActivityIndicator;
 @property (nonatomic) NSTimeInterval timeInterval;
@@ -67,10 +79,10 @@ typedef int HTTPActionServiceState;
 - (void)clearPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName;
 - (BOOL)contains:(NSString *)actionId;
 - (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error;
-- (BOOL)doActionWithRequest:(HTTPRequestObject *)request;
+- (HTTPRequestObject *)doActionWithRequestObject:(HTTPRequestObject *)object success:(SuccessBlock)success error:(ErrorBlock)error;
 - (void)loadPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName;
-- (HTTPRequestObject *)objectWithData:(NSData *)data;
 - (NSString *)stringWithServiceState;
+- (NSURLObject *)urlObjectWithRequstObject:(HTTPRequestObject *)object;
 @end
 
 // ================================================================================================

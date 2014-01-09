@@ -1,9 +1,9 @@
 //
-//  MultipartFormDataObject.h
+//  XCTest+Async.m
 //  w3action
 //
-//  Created by KH Kim on 2013. 12. 30..
-//  Copyright (c) 2013 KH Kim. All rights reserved.
+//  Created by KH Kim on 2014. 1. 2..
+//  Copyright (c) 2014년 KH Kim. All rights reserved.
 //
 
 /*
@@ -22,10 +22,19 @@
  limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "XCTest+Async.h"
 
-@interface MultipartFormDataObject : NSObject
-@property (nonatomic, retain) NSString *filename;
-@property (nonatomic, retain) NSData *data;
-+ (MultipartFormDataObject *)objectWithFilename:(NSString *)filename data:(NSData *)data;
+@implementation XCTest (org_apache_w3action_XCTest)
+- (void)async:(void (^)(FinishBlock finish))execution
+{
+    __block BOOL wating = YES;
+    FinishBlock fb = ^(void) {
+        wating = NO;
+    };
+    
+    execution(fb);
+    
+    while (wating)
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01f]];
+}
 @end

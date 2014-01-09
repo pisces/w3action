@@ -26,6 +26,22 @@
 
 // ================================================================================================
 //
+//  HTTPActionObject
+//
+// ================================================================================================
+
+@implementation NSURLObject
++ (NSURLObject *)objectWithRequest:(NSURLRequest *)request response:(NSHTTPURLResponse *)response
+{
+    NSURLObject *object = [[NSURLObject alloc] init];
+    object.request = request;
+    object.response = response;
+    return object;
+}
+@end
+
+// ================================================================================================
+//
 //  Implementation: HTTPActionManager
 //
 // ================================================================================================
@@ -35,7 +51,7 @@
 @private
     NSMutableDictionary *actionPlist;
     NSMutableDictionary *actionPlistDictionary;
-    NSMutableDictionary *requestObjectDic;
+    NSMutableDictionary *urlObjectDic;
 }
 
 // ================================================================================================
@@ -68,7 +84,7 @@ static HTTPActionManager *uniqueInstance;
     _header = nil;
     actionPlist = nil;
     actionPlistDictionary = nil;
-    requestObjectDic = nil;
+    urlObjectDic = nil;
 }
 
 - (id)init
@@ -83,7 +99,7 @@ static HTTPActionManager *uniqueInstance;
         _plistName = @"HTTPAction";
         actionPlist = [[NSMutableDictionary alloc] init];
         actionPlistDictionary = [[NSMutableDictionary alloc] init];
-        requestObjectDic = [[NSMutableDictionary alloc] init];
+        urlObjectDic = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -106,11 +122,9 @@ static HTTPActionManager *uniqueInstance;
 
 - (void)clearPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName
 {
-    NSString *key = [NSString stringWithFormat:@"%d-%@", bundle.hash, actionPlistName];
-    
+    NSString *key = [NSString stringWithFormat:@"%lu-%@", (unsigned long) bundle.hash, actionPlistName];
     if ([actionPlistDictionary objectForKey:key])
     {
-        
         NSDictionary *actions = [actionPlistDictionary objectForKey:key];
         
         for (NSString *key in actions)
@@ -129,26 +143,26 @@ static HTTPActionManager *uniqueInstance;
 
 - (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error
 {
-    if (![self contains:actionId]) {
+    if (![self contains:actionId])
+    {
         error([NSError errorWithDomain:[NSString stringWithFormat:@"The name of actionId \"%@\" is not exist in plist.", actionId] code:99 userInfo:nil]);
         return nil;
     }
-    
-    NSDictionary *action = [actionPlist objectForKey:actionId];
-    HTTPRequestObject *request = [HTTPRequestObject createWithAction:action param:param body:body header:header success:success error:error];
     
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
     if (_useNetworkActivityIndicator)
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
-    [NSThread detachNewThreadSelector:@selector(doRequest:) toTarget:self withObject:request];
-    return request;
+    NSDictionary *action = [actionPlist objectForKey:actionId];
+    HTTPRequestObject *object = [HTTPRequestObject objectWithAction:action param:param body:body header:header success:success error:error];
+    [NSThread detachNewThreadSelector:@selector(doRequest:) toTarget:self withObject:object];
+    return object;
 }
 
-- (BOOL)doActionWithRequest:(HTTPRequestObject *)request
+- (HTTPRequestObject *)doActionWithRequestObject:(HTTPRequestObject *)object success:(SuccessBlock)success error:(ErrorBlock)error
 {
-    if (!request)
+    if (!object)
         return NO;
     
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -156,18 +170,22 @@ static HTTPActionManager *uniqueInstance;
     if (_useNetworkActivityIndicator)
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
-    [NSThread detachNewThreadSelector:@selector(doRequest:) toTarget:self withObject:request];
-    return YES;
+    object.successBlock = success;
+    object.errorBlock = error;
+    
+    [NSThread detachNewThreadSelector:@selector(doRequest:) toTarget:self withObject:object];
+    return object;
 }
 
 - (void)loadPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName
 {
-    NSString *key = [NSString stringWithFormat:@"%d-%@", bundle.hash, actionPlistName];
+    NSString *key = [NSString stringWithFormat:@"%lu-%@", (unsigned long) bundle.hash, actionPlistName];
     if ([actionPlistDictionary objectForKey:key])
         return;
     
     NSDictionary *rootDictionary = [bundle dictionaryWithPlistName:actionPlistName];
-    if (rootDictionary == nil) {
+    if (rootDictionary == nil)
+    {
 #if HTTPLogEnabled
         NSLog(@"WARNING: %@.plist is missing.", actionPlistName);
 #endif
@@ -177,12 +195,6 @@ static HTTPActionManager *uniqueInstance;
     NSDictionary *actions = [rootDictionary objectForKey:@"Actions"];
     [actionPlist addEntriesFromDictionary:actions];
     [actionPlistDictionary setObject:actions forKey:key];
-}
-
-- (HTTPRequestObject *)objectWithData:(NSData *)data
-{
-    NSNumber *objectKey = [NSNumber numberWithUnsignedLong:[data hash]];
-    return [requestObjectDic objectForKey:objectKey];
 }
 
 - (void)setServiceState:(HTTPActionServiceState)serviceState
@@ -204,9 +216,13 @@ static HTTPActionManager *uniqueInstance;
         return @"Dev";
     if (_serviceState == HTTPActionServiceStateQA)
         return @"QA";
-    if (_serviceState == HTTPActionServiceStateSM)
-        return @"SM";
     return @"";
+}
+
+- (NSURLObject *)urlObjectWithRequstObject:(HTTPRequestObject *)object
+{
+    NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
+    return [urlObjectDic objectForKey:key];
 }
 
 // ================================================================================================
@@ -221,11 +237,9 @@ static HTTPActionManager *uniqueInstance;
             [self sendAsynchronousRequest:request withObject:object];
         else
             [self sendSynchronousRequest:request withObject:object];
-        
 #if HTTPLogEnabled
         NSLog(@"Request End -----------------------------------------");
 #endif
-        
     }
     [NSThread exit];
 }
@@ -252,11 +266,9 @@ static HTTPActionManager *uniqueInstance;
         for (NSString *key in object.header)
             [request setValue:[object.header objectForKey:key] forHTTPHeaderField:key];
     }
-    
 #if HTTPLogEnabled
-    NSLog(@"\nRequest Start -----------------------------------------\nurl -> %@,\n contentType -> %@,\n method -> %@,\n header -> %@,\n param -> %@", orgUrl, contentType, method, request.allHTTPHeaderFields, object.param);
+    NSLog(@"\nRequest Start -----------------------------------------\norgUrl -> %@,\nurl -> %@,\ncontentType -> %@,\n method -> %@,\n header -> %@,\n param -> %@", orgUrl, url, contentType, method, request.allHTTPHeaderFields, object.param);
 #endif
-    
     if ([contentType isEqualToString:ContentTypeMultipartFormData])
     {
         NSString *boundary = @"0xKhTmLbOuNdArY";
@@ -289,7 +301,7 @@ static HTTPActionManager *uniqueInstance;
         if (bodyString)
         {
             NSData *body = [bodyString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-            NSString *bodyLength = [NSString stringWithFormat:@"%ul", [body length]];
+            NSString *bodyLength = [NSString stringWithFormat:@"%lu", (unsigned long) [body length]];
             [request setValue:bodyLength forHTTPHeaderField:@"Content-Length"];
             [request setHTTPBody:body];
         }
@@ -309,20 +321,17 @@ static HTTPActionManager *uniqueInstance;
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError){
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSNumber *objectKey = [NSNumber numberWithUnsignedLong:[data hash]];
-            [requestObjectDic setObject:object forKey:objectKey];
+            NSHTTPURLResponse *_response = (NSHTTPURLResponse *) response;
+            NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
+            [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:_response] forKey:key];
             
             if (connectionError) {
                 callError(connectionError);
             } else {
-                NSHTTPURLResponse *_response = (NSHTTPURLResponse *) response;
 #if HTTPLogEnabled
                 NSLog(@"_response.statusCode -> %d", _response.statusCode);
 #endif
                 if (_response.statusCode >= 200 && _response.statusCode <= 304) {
-                    NSNumber *objectKey = [NSNumber numberWithUnsignedLong:[data hash]];
-                    [requestObjectDic setObject:object forKey:objectKey];
-                    
                     object.successBlock(data);
 #if HTTPLogEnabled
                     NSLog(@"\nasynchronousRequest success -> %@", [data dictionaryWithUTF8JSONString]);
@@ -332,7 +341,7 @@ static HTTPActionManager *uniqueInstance;
                 }
             }
             
-            [requestObjectDic removeObjectForKey:objectKey];
+            [urlObjectDic removeObjectForKey:key];
             
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         });
@@ -342,20 +351,21 @@ static HTTPActionManager *uniqueInstance;
 - (void)sendSynchronousRequest:(NSURLRequest *)request withObject:(HTTPRequestObject *)object
 {
     NSError *error = nil;
-    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+    NSHTTPURLResponse *response = nil;
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 #if HTTPLogEnabled
     NSLog(@"\nsynchronousRequest result, error -> %@, %@", [result dictionaryWithUTF8JSONString], error);
 #endif
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSNumber *objectKey = [NSNumber numberWithUnsignedLong:[result hash]];
-        [requestObjectDic setObject:object forKey:objectKey];
+        NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
+        [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
         
         if (error != nil)
             object.errorBlock(error);
         else
             object.successBlock(result);
         
-        [requestObjectDic removeObjectForKey:objectKey];
+        [urlObjectDic removeObjectForKey:key];
         
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     });
