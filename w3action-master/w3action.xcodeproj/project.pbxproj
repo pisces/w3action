@@ -30,11 +30,7 @@
 		236C29FC187259C80042279E /* libw3action-Device.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29E4187259C80042279E /* libw3action-Device.a */; };
 		236C2A02187259C80042279E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 236C2A00187259C80042279E /* InfoPlist.strings */; };
 		236C2A04187259C80042279E /* w3actionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 236C2A03187259C80042279E /* w3actionTests.m */; };
-		23826DDB187E6F8F00168506 /* XCTest+Async.m in Sources */ = {isa = PBXBuildFile; fileRef = 23826DDA187E6F8F00168506 /* XCTest+Async.m */; };
-		23826DDC187E6F8F00168506 /* XCTest+Async.m in Sources */ = {isa = PBXBuildFile; fileRef = 23826DDA187E6F8F00168506 /* XCTest+Async.m */; };
-		23826DDD187E6F8F00168506 /* XCTest+Async.m in Sources */ = {isa = PBXBuildFile; fileRef = 23826DDA187E6F8F00168506 /* XCTest+Async.m */; };
-		23826DDE187E6F9B00168506 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29F5187259C80042279E /* XCTest.framework */; };
-		23826DDF187E6FAA00168506 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29F5187259C80042279E /* XCTest.framework */; };
+		23817D52187F821E00CC031A /* XCTest+Async.m in Sources */ = {isa = PBXBuildFile; fileRef = 23817D51187F821E00CC031A /* XCTest+Async.m */; };
 		2385BD64187A90DC00ADCD52 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2385BD63187A90DC00ADCD52 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2385BD65187A90DC00ADCD52 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2385BD63187A90DC00ADCD52 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2385BD66187A90DC00ADCD52 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2385BD63187A90DC00ADCD52 /* JSONKit.m */; };
@@ -100,8 +96,8 @@
 		236C29FF187259C80042279E /* w3actionTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "w3actionTests-Info.plist"; sourceTree = "<group>"; };
 		236C2A01187259C80042279E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		236C2A03187259C80042279E /* w3actionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = w3actionTests.m; sourceTree = "<group>"; };
-		23826DD9187E6F8F00168506 /* XCTest+Async.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTest+Async.h"; sourceTree = "<group>"; };
-		23826DDA187E6F8F00168506 /* XCTest+Async.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCTest+Async.m"; sourceTree = "<group>"; };
+		23817D50187F821E00CC031A /* XCTest+Async.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTest+Async.h"; sourceTree = "<group>"; };
+		23817D51187F821E00CC031A /* XCTest+Async.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCTest+Async.m"; sourceTree = "<group>"; };
 		2385BD62187A90DC00ADCD52 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = Classes/JSONKit.h; sourceTree = "<group>"; };
 		2385BD63187A90DC00ADCD52 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = Classes/JSONKit.m; sourceTree = "<group>"; };
 		23B96EB418726F5D0040D283 /* HTTPActionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPActionManager.h; sourceTree = "<group>"; };
@@ -125,7 +121,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23826DDE187E6F9B00168506 /* XCTest.framework in Frameworks */,
 				23578C611872827F008101CB /* UIKit.framework in Frameworks */,
 				236C29E8187259C80042279E /* Foundation.framework in Frameworks */,
 			);
@@ -147,7 +142,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23B96ED3187270B70040D283 /* Foundation.framework in Frameworks */,
-				23826DDF187E6FAA00168506 /* XCTest.framework in Frameworks */,
 				23578C6418728291008101CB /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -207,6 +201,7 @@
 		236C29FD187259C80042279E /* w3actionTests */ = {
 			isa = PBXGroup;
 			children = (
+				23817D4F187F821E00CC031A /* AsyncXCTest */,
 				236C2A03187259C80042279E /* w3actionTests.m */,
 				236C29FE187259C80042279E /* Supporting Files */,
 			);
@@ -220,6 +215,15 @@
 				236C2A00187259C80042279E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		23817D4F187F821E00CC031A /* AsyncXCTest */ = {
+			isa = PBXGroup;
+			children = (
+				23817D50187F821E00CC031A /* XCTest+Async.h */,
+				23817D51187F821E00CC031A /* XCTest+Async.m */,
+			);
+			path = AsyncXCTest;
 			sourceTree = "<group>";
 		};
 		2385BD61187A90CC00ADCD52 /* JSONKit */ = {
@@ -260,8 +264,6 @@
 				23B96EBB18726F5D0040D283 /* NSData+Extensions.m */,
 				23EFAF44187ABBB300BA048F /* NSString+w3action.h */,
 				23EFAF45187ABBB300BA048F /* NSString+w3action.m */,
-				23826DD9187E6F8F00168506 /* XCTest+Async.h */,
-				23826DDA187E6F8F00168506 /* XCTest+Async.m */,
 			);
 			name = ext;
 			sourceTree = "<group>";
@@ -395,7 +397,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23826DDB187E6F8F00168506 /* XCTest+Async.m in Sources */,
 				23B96EC418726F5D0040D283 /* NSData+Extensions.m in Sources */,
 				23B96EC018726F5D0040D283 /* HTTPRequestObject.m in Sources */,
 				2385BD64187A90DC00ADCD52 /* JSONKit.m in Sources */,
@@ -414,7 +415,7 @@
 				23B96EC718726F5D0040D283 /* w3action.m in Sources */,
 				23B96EC118726F5D0040D283 /* HTTPRequestObject.m in Sources */,
 				23B96EBF18726F5D0040D283 /* HTTPActionManager.m in Sources */,
-				23826DDD187E6F8F00168506 /* XCTest+Async.m in Sources */,
+				23817D52187F821E00CC031A /* XCTest+Async.m in Sources */,
 				2385BD66187A90DC00ADCD52 /* JSONKit.m in Sources */,
 				23B96EC518726F5D0040D283 /* NSData+Extensions.m in Sources */,
 			);
@@ -424,7 +425,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23826DDC187E6F8F00168506 /* XCTest+Async.m in Sources */,
 				23B96ECD187270B70040D283 /* NSData+Extensions.m in Sources */,
 				23B96ECE187270B70040D283 /* HTTPRequestObject.m in Sources */,
 				2385BD65187A90DC00ADCD52 /* JSONKit.m in Sources */,

@@ -1,6 +1,6 @@
 //
 //  XCTest+Async.h
-//  w3action
+//  AsyncXCTest
 //
 //  Created by KH Kim on 2014. 1. 2..
 //  Copyright (c) 2014년 KH Kim. All rights reserved.

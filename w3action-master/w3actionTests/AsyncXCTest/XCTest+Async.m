@@ -1,6 +1,6 @@
 //
 //  XCTest+Async.m
-//  w3action
+//  AsyncXCTest
 //
 //  Created by KH Kim on 2014. 1. 2..
 //  Copyright (c) 2014년 KH Kim. All rights reserved.
@@ -27,14 +27,16 @@
 @implementation XCTest (org_apache_w3action_XCTest)
 - (void)async:(void (^)(FinishBlock finish))execution
 {
-    __block BOOL wating = YES;
-    FinishBlock fb = ^(void) {
-        wating = NO;
-    };
-    
-    execution(fb);
-    
-    while (wating)
-        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01f]];
+    dispatch_async(dispatch_get_current_queue(), ^{
+        __block BOOL wating = YES;
+        FinishBlock fb = ^(void) {
+            wating = NO;
+        };
+        
+        execution(fb);
+        
+        while (wating)
+            [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01f]];
+    });
 }
 @end

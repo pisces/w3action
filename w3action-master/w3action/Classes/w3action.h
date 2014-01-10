@@ -25,7 +25,6 @@
 #import <Foundation/Foundation.h>
 #import "HTTPActionManager.h"
 #import "NSString+w3action.h"
-#import "XCTest+Async.h"
 
 @interface w3action : NSObject
 @end
