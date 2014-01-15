@@ -49,6 +49,7 @@
 @implementation HTTPActionManager
 {
 @private
+    dispatch_queue_t queue;
     NSMutableDictionary *actionPlist;
     NSMutableDictionary *actionPlistDictionary;
     NSMutableDictionary *urlObjectDic;
@@ -81,6 +82,8 @@ static HTTPActionManager *uniqueInstance;
 
 - (void)dealloc
 {
+    dispatch_release(queue);
+    
     _header = nil;
     actionPlist = nil;
     actionPlistDictionary = nil;
@@ -92,6 +95,7 @@ static HTTPActionManager *uniqueInstance;
     self = [super init];
     if (self)
     {
+        queue = dispatch_queue_create("org.apache.w3action.HTTPActionManager", NULL);
         _async = YES;
         _useNetworkActivityIndicator = YES;
         _timeInterval = 10;
@@ -156,7 +160,7 @@ static HTTPActionManager *uniqueInstance;
     
     NSDictionary *action = [actionPlist objectForKey:actionId];
     HTTPRequestObject *object = [HTTPRequestObject objectWithAction:action param:param body:body header:header success:success error:error];
-    [NSThread detachNewThreadSelector:@selector(doRequest:) toTarget:self withObject:object];
+    [self doRequest:object];
     return object;
 }
 
@@ -173,7 +177,7 @@ static HTTPActionManager *uniqueInstance;
     object.successBlock = success;
     object.errorBlock = error;
     
-    [NSThread detachNewThreadSelector:@selector(doRequest:) toTarget:self withObject:object];
+    [self doRequest:object];
     return object;
 }
 
@@ -186,7 +190,7 @@ static HTTPActionManager *uniqueInstance;
     NSDictionary *rootDictionary = [bundle dictionaryWithPlistName:actionPlistName];
     if (rootDictionary == nil)
     {
-#if HTTPLogEnabled
+#if DEBUG
         NSLog(@"WARNING: %@.plist is missing.", actionPlistName);
 #endif
         return;
@@ -231,17 +235,16 @@ static HTTPActionManager *uniqueInstance;
 
 - (void)doRequest:(HTTPRequestObject *)object
 {
-    @autoreleasepool {
+    dispatch_async(queue, ^(void){
         NSURLRequest *request = [self requestWithObject:object];
         if (_async)
             [self sendAsynchronousRequest:request withObject:object];
         else
             [self sendSynchronousRequest:request withObject:object];
-#if HTTPLogEnabled
-        NSLog(@"Request End -----------------------------------------");
+    });
+#if DEBUG
+    NSLog(@"Request End -----------------------------------------");
 #endif
-    }
-    [NSThread exit];
 }
 
 - (NSURLRequest *)requestWithObject:(HTTPRequestObject *)object
@@ -266,7 +269,7 @@ static HTTPActionManager *uniqueInstance;
         for (NSString *key in object.header)
             [request setValue:[object.header objectForKey:key] forHTTPHeaderField:key];
     }
-#if HTTPLogEnabled
+#if DEBUG
     NSLog(@"\nRequest Start -----------------------------------------\norgUrl -> %@,\nurl -> %@,\ncontentType -> %@,\n method -> %@,\n header -> %@,\n param -> %@", orgUrl, url, contentType, method, request.allHTTPHeaderFields, object.param);
 #endif
     if ([contentType isEqualToString:ContentTypeMultipartFormData])
@@ -295,7 +298,7 @@ static HTTPActionManager *uniqueInstance;
             bodyString = [((NSDictionary *) object.body) urlString];
         else
             bodyString = object.paramString != nil && [method isEqualToString:HTTP_METHOD_POST] ? [object paramString] : nil;
-#if HTTPLogEnabled
+#if DEBUG
         NSLog(@"bodyString -> %@", bodyString);
 #endif
         if (bodyString)
@@ -314,26 +317,26 @@ static HTTPActionManager *uniqueInstance;
     typedef void (^CallError)(NSError *error);
     CallError callError = ^void(NSError *error) {
         object.errorBlock(error);
-#if HTTPLogEnabled
+#if DEBUG
         NSLog(@"HTTPAction error -> %@", error);
 #endif
     };
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError){
-        dispatch_async(dispatch_get_main_queue(), ^{
             NSHTTPURLResponse *_response = (NSHTTPURLResponse *) response;
             NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
             [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:_response] forKey:key];
-            
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
             if (connectionError) {
                 callError(connectionError);
             } else {
-#if HTTPLogEnabled
+#if DEBUG
                 NSLog(@"_response.statusCode -> %d", _response.statusCode);
 #endif
                 if (_response.statusCode >= 200 && _response.statusCode <= 304) {
-                    object.successBlock(data);
-#if HTTPLogEnabled
+                        object.successBlock(data);
+#if DEBUG
                     NSLog(@"\nasynchronousRequest success -> %@", [data dictionaryWithUTF8JSONString]);
 #endif
                 } else {
@@ -353,21 +356,21 @@ static HTTPActionManager *uniqueInstance;
     NSError *error = nil;
     NSHTTPURLResponse *response = nil;
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-#if HTTPLogEnabled
+#if DEBUG
     NSLog(@"\nsynchronousRequest result, error -> %@, %@", [result dictionaryWithUTF8JSONString], error);
 #endif
+    NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
+    [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
-        [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
-        
         if (error != nil)
             object.errorBlock(error);
         else
             object.successBlock(result);
         
-        [urlObjectDic removeObjectForKey:key];
-        
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        
+        [urlObjectDic removeObjectForKey:key];
     });
 }
 @end

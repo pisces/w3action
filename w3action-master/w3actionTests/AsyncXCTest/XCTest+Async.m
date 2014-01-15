@@ -27,16 +27,16 @@
 @implementation XCTest (org_apache_w3action_XCTest)
 - (void)async:(void (^)(FinishBlock finish))execution
 {
-    dispatch_async(dispatch_get_current_queue(), ^{
-        __block BOOL wating = YES;
-        FinishBlock fb = ^(void) {
-            wating = NO;
-        };
-        
-        execution(fb);
-        
+    __block BOOL wating = YES;
+    FinishBlock fb = ^(void) {
+        wating = NO;
+    };
+    
+    execution(fb);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
         while (wating)
-            [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01f]];
+            [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1f]];
     });
 }
 @end
