@@ -36,6 +36,9 @@
 #define ContentTypeApplicationXML @"application/xml"
 #define ContentTypeApplicationXWWWFormURLEncoded @"application/x-www-form-urlencoded"
 #define ContentTypeMultipartFormData @"multipart/form-data"
+#define DataTypeJSON @"json"
+#define DataTypeXML @"xml"
+#define DataTypeText @"text"
 #define HTTP_METHOD_GET @"GET"
 #define HTTP_METHOD_POST @"POST"
 

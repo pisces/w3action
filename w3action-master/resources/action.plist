@@ -7,7 +7,7 @@
 		<key>example-datatype-json</key>
 		<dict>
 			<key>url</key>
-			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example.json</string>
+			<string>https://github.com/pisces/w3action/blob/25914f630fdb318b2f89ba702ab32bc268baaf62/w3action-master/resources/example-datatype-json.md</string>
 			<key>method</key>
 			<string>GET</string>
 			<key>contentType</key>
@@ -20,7 +20,7 @@
 		<key>example-datatype-xml</key>
 		<dict>
 			<key>url</key>
-			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example.json</string>
+			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example.md</string>
 			<key>method</key>
 			<string>GET</string>
 			<key>contentType</key>
@@ -33,7 +33,7 @@
 		<key>example-datatype-text</key>
 		<dict>
 			<key>url</key>
-			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example.json</string>
+			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example.md</string>
 			<key>method</key>
 			<string>GET</string>
 			<key>contentType</key>
@@ -43,7 +43,7 @@
 			<key>timeout</key>
 			<string>10</string>
 		</dict>
-		<key>example-multipart</key>
+		<key>example-contenttype-multipart</key>
 		<dict>
 			<key>url</key>
 			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example-multipart.json</string>

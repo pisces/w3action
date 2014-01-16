@@ -100,11 +100,13 @@
 
 @implementation NSDictionary (com_pisces_com_KnitNet)
 
-static NSString *toString(id object) {
+static NSString *toString(id object)
+{
     return [NSString stringWithFormat: @"%@", object];
 }
 
-static NSString *urlEncode(id object) {
+static NSString *urlEncode(id object)
+{
     NSString *string = toString(object);
     return [string stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
 }

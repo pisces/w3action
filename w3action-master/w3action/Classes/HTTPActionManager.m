@@ -24,6 +24,12 @@
 
 #import "HTTPActionManager.h"
 
+#define HTTPActionContentTypeKey @"contentType"
+#define HTTPActionDataTypeKey @"dataType"
+#define HTTPActionMethodKey @"method"
+#define HTTPActionTimeoutKey @"timeout"
+#define HTTPActionURLKey @"url"
+
 // ================================================================================================
 //
 //  HTTPActionObject
@@ -217,14 +223,29 @@ static HTTPActionManager *uniqueInstance;
 #endif
 }
 
+- (id)resultWithData:(NSData *)data dataType:(NSString *)dataType
+{
+    if (!data)
+        return nil;
+    
+    if ([dataType isEqualToString:DataTypeJSON])
+    {
+        NSLog(@"DataTypeJSON -> %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        return [data dictionaryWithUTF8JSONString];
+    }
+    
+    return nil;
+}
+
 - (NSURLRequest *)requestWithObject:(HTTPRequestObject *)object
 {
-    NSString *orgUrl = [object.action objectForKey:@"url"];
-    NSString *method = [object.action objectForKey:@"method"];
-    NSString *contentType = [object.action objectForKey:@"contentType"];
+    NSString *orgUrl = [object.action objectForKey:HTTPActionURLKey];
+    NSString *method = [object.action objectForKey:HTTPActionMethodKey];
+    NSString *contentType = [object.action objectForKey:HTTPActionContentTypeKey];
+    NSTimeInterval timeInterval = [object.action objectForKey:HTTPActionTimeoutKey] ?  [[object.action objectForKey:HTTPActionTimeoutKey] doubleValue] : _timeInterval;
     NSString *url = (object.param != nil && [method isEqualToString:HTTP_METHOD_GET]) ? [orgUrl stringByAppendingFormat:@"?%@", [object paramWithUTF8StringEncoding]] : orgUrl;
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:_timeInterval];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeInterval];
     
     [request setHTTPMethod:method];
     
@@ -291,7 +312,6 @@ static HTTPActionManager *uniqueInstance;
         NSLog(@"HTTPAction error -> %@", error);
 #endif
     };
-    
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError){
             NSHTTPURLResponse *_response = (NSHTTPURLResponse *) response;
             NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
@@ -305,7 +325,9 @@ static HTTPActionManager *uniqueInstance;
                 NSLog(@"_response.statusCode -> %d", _response.statusCode);
 #endif
                 if (_response.statusCode >= 200 && _response.statusCode <= 304) {
-                        object.successBlock(data);
+                    NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
+                    NSLog(@"dataType -> %@", dataType);
+                    object.successBlock([self resultWithData:data dataType:dataType]);
 #if DEBUG
                     NSLog(@"\nasynchronousRequest success -> %@", [data dictionaryWithUTF8JSONString]);
 #endif

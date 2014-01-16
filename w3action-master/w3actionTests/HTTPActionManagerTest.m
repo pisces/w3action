@@ -29,23 +29,31 @@
 
 - (void)testAddResourceWithBundle
 {
-    XCTAssertNotNil([[HTTPActionManager sharedInstance] actionWith:@"example"]);
+    XCTAssertNotNil([[HTTPActionManager sharedInstance] actionWith:@"example-datatype-json"]);
+    XCTAssertNotNil([[HTTPActionManager sharedInstance] actionWith:@"example-datatype-xml"]);
+    XCTAssertNotNil([[HTTPActionManager sharedInstance] actionWith:@"example-datatype-text"]);
+    XCTAssertNotNil([[HTTPActionManager sharedInstance] actionWith:@"example-contenttype-multipart"]);
 }
 
 - (void)testContains
 {
-    XCTAssertTrue([[HTTPActionManager sharedInstance] contains:@"example"]);
+    XCTAssertTrue([[HTTPActionManager sharedInstance] contains:@"example-datatype-json"]);
+    XCTAssertTrue([[HTTPActionManager sharedInstance] contains:@"example-datatype-xml"]);
+    XCTAssertTrue([[HTTPActionManager sharedInstance] contains:@"example-datatype-text"]);
+    XCTAssertTrue([[HTTPActionManager sharedInstance] contains:@"example-contenttype-multipart"]);
 }
 
-- (void)testDoActionDataTypeJSON
+- (void)testDoActionWithDataTypeJSON
 {
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
     [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil header:nil success:^(id result){
         [monitor signal];
+        NSLog(@"result -> %@", result);
         XCTAssertNotNil(result);
-        XCTAssertNotNil([result isKindOfClass:[NSDictionary class]]);
+        XCTAssertTrue([result isKindOfClass:[NSDictionary class]]);
     } error:^(NSError *error){
+        NSLog(@"error -> %@", error);
         [monitor signal];
         XCTAssertFalse(YES);
     }];
