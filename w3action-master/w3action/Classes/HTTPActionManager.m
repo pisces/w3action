@@ -229,10 +229,9 @@ static HTTPActionManager *uniqueInstance;
         return nil;
     
     if ([dataType isEqualToString:DataTypeJSON])
-    {
-        NSLog(@"DataTypeJSON -> %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         return [data dictionaryWithUTF8JSONString];
-    }
+    if ([dataType isEqualToString:DataTypeText])
+        return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
     return nil;
 }
@@ -326,7 +325,6 @@ static HTTPActionManager *uniqueInstance;
 #endif
                 if (_response.statusCode >= 200 && _response.statusCode <= 304) {
                     NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
-                    NSLog(@"dataType -> %@", dataType);
                     object.successBlock([self resultWithData:data dataType:dataType]);
 #if DEBUG
                     NSLog(@"\nasynchronousRequest success -> %@", [data dictionaryWithUTF8JSONString]);
