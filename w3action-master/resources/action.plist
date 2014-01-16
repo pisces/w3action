@@ -4,23 +4,55 @@
 <dict>
 	<key>Actions</key>
 	<dict>
-		<key>example</key>
+		<key>example-datatype-json</key>
 		<dict>
 			<key>url</key>
-			<string>https://github.com/pisces/w3action/tree/master/w3action-master/resource/example.json</string>
+			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example.json</string>
 			<key>method</key>
 			<string>GET</string>
 			<key>contentType</key>
 			<string>application/x-www-form-urlencoded</string>
+			<key>dataType</key>
+			<string>json</string>
+			<key>timeout</key>
+			<string>10</string>
+		</dict>
+		<key>example-datatype-xml</key>
+		<dict>
+			<key>url</key>
+			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example.json</string>
+			<key>method</key>
+			<string>GET</string>
+			<key>contentType</key>
+			<string>application/x-www-form-urlencoded</string>
+			<key>dataType</key>
+			<string>xml</string>
+			<key>timeout</key>
+			<string>10</string>
+		</dict>
+		<key>example-datatype-text</key>
+		<dict>
+			<key>url</key>
+			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example.json</string>
+			<key>method</key>
+			<string>GET</string>
+			<key>contentType</key>
+			<string>application/x-www-form-urlencoded</string>
+			<key>dataType</key>
+			<string>text</string>
+			<key>timeout</key>
+			<string>10</string>
 		</dict>
 		<key>example-multipart</key>
 		<dict>
 			<key>url</key>
-			<string>https://github.com/pisces/w3action/tree/master/w3action-master/resource/example-multipart.json</string>
+			<string>https://github.com/pisces/w3action/blob/master/w3action-master/resources/example-multipart.json</string>
 			<key>method</key>
 			<string>POST</string>
-			<key>contentType</key>
-			<string>multipart/form-data</string>
+			<key>dataType</key>
+			<string>json</string>
+			<key>timeout</key>
+			<string>10</string>
 		</dict>
 	</dict>
 </dict>

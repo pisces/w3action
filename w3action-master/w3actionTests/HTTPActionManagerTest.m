@@ -32,26 +32,19 @@
     XCTAssertNotNil([[HTTPActionManager sharedInstance] actionWith:@"example"]);
 }
 
-- (void)testRemoveResourceWithBundle
-{
-    [[HTTPActionManager sharedInstance] removeResourceWithBundle:[NSBundle bundleForClass:[self class]] plistName:@"HTTPAction"];
-    
-    XCTAssertNil([[HTTPActionManager sharedInstance] actionWith:@"example"]);
-}
-
 - (void)testContains
 {
     XCTAssertTrue([[HTTPActionManager sharedInstance] contains:@"example"]);
 }
 
-- (void)testDoAction
+- (void)testDoActionDataTypeJSON
 {
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
-    [[HTTPActionManager sharedInstance] doAction:@"example" param:nil body:nil header:nil success:^(NSData *result){
+    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil header:nil success:^(id result){
         [monitor signal];
         XCTAssertNotNil(result);
-        XCTAssertNotNil([NSString stringWithData:result]);
+        XCTAssertNotNil([result isKindOfClass:[NSDictionary class]]);
     } error:^(NSError *error){
         [monitor signal];
         XCTAssertFalse(YES);
@@ -113,9 +106,7 @@
         XCTAssertNotNil(result);
         XCTAssertNotNil([NSString stringWithData:result]);
     } error:^(NSError *error){
-        NSLog(@"error -> %@", error);
         [monitor signal];
-        XCTAssertFalse(YES);
     }];
     
     [monitor wait];

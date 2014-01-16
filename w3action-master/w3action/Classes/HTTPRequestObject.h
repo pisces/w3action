@@ -24,7 +24,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^SuccessBlock)(NSData *result);
+typedef void (^SuccessBlock)(id result);
 typedef void (^ErrorBlock)(NSError *error);
 
 @interface HTTPRequestObject : NSObject <NSURLConnectionDelegate>
