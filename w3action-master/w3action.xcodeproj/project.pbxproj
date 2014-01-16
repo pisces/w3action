@@ -26,8 +26,8 @@
 		233A57ED188770A600E3026B /* TRVSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 233A57EA188770A600E3026B /* TRVSMonitor.m */; };
 		233A57F91887877F00E3026B /* HTTPActionManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 233A57EE188770C500E3026B /* HTTPActionManagerTest.m */; };
 		233A580718878A3400E3026B /* action.plist in Resources */ = {isa = PBXBuildFile; fileRef = 233A580418878A3400E3026B /* action.plist */; };
-		233A580818878A3400E3026B /* example-multipart.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 233A580518878A3400E3026B /* example-multipart.geojson */; };
-		233A580918878A3400E3026B /* example.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 233A580618878A3400E3026B /* example.geojson */; };
+		233A580818878A3400E3026B /* example-multipart.json in Resources */ = {isa = PBXBuildFile; fileRef = 233A580518878A3400E3026B /* example-multipart.json */; };
+		233A580918878A3400E3026B /* example.json in Resources */ = {isa = PBXBuildFile; fileRef = 233A580618878A3400E3026B /* example.json */; };
 		23578C611872827F008101CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23578C601872827F008101CB /* UIKit.framework */; };
 		23578C6418728291008101CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23578C601872827F008101CB /* UIKit.framework */; };
 		23578C6518728292008101CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23578C601872827F008101CB /* UIKit.framework */; };
@@ -94,8 +94,8 @@
 		233A57EA188770A600E3026B /* TRVSMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TRVSMonitor.m; path = Classes/TRVSMonitor.m; sourceTree = "<group>"; };
 		233A57EE188770C500E3026B /* HTTPActionManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPActionManagerTest.m; sourceTree = "<group>"; };
 		233A580418878A3400E3026B /* action.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = action.plist; sourceTree = "<group>"; };
-		233A580518878A3400E3026B /* example-multipart.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "example-multipart.geojson"; sourceTree = "<group>"; };
-		233A580618878A3400E3026B /* example.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example.geojson; sourceTree = "<group>"; };
+		233A580518878A3400E3026B /* example-multipart.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "example-multipart.json"; sourceTree = "<group>"; };
+		233A580618878A3400E3026B /* example.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = example.json; sourceTree = "<group>"; };
 		23578C601872827F008101CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		236C29E4187259C80042279E /* libw3action-Device.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libw3action-Device.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		236C29E7187259C80042279E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -166,8 +166,8 @@
 			isa = PBXGroup;
 			children = (
 				233A580418878A3400E3026B /* action.plist */,
-				233A580518878A3400E3026B /* example-multipart.geojson */,
-				233A580618878A3400E3026B /* example.geojson */,
+				233A580518878A3400E3026B /* example-multipart.json */,
+				233A580618878A3400E3026B /* example.json */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -373,8 +373,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				233A580718878A3400E3026B /* action.plist in Resources */,
-				233A580818878A3400E3026B /* example-multipart.geojson in Resources */,
-				233A580918878A3400E3026B /* example.geojson in Resources */,
+				233A580818878A3400E3026B /* example-multipart.json in Resources */,
+				233A580918878A3400E3026B /* example.json in Resources */,
 				236C2A02187259C80042279E /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
