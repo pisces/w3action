@@ -99,8 +99,6 @@ static HTTPActionManager *uniqueInstance;
         _async = YES;
         _useNetworkActivityIndicator = YES;
         _timeInterval = 10;
-        _serviceState = HTTPActionServiceStateDisabled;
-        _plistName = @"HTTPAction";
         actionPlist = [[NSMutableDictionary alloc] init];
         actionPlistDictionary = [[NSMutableDictionary alloc] init];
         urlObjectDic = [[NSMutableDictionary alloc] init];
@@ -112,11 +110,6 @@ static HTTPActionManager *uniqueInstance;
 //  Public
 // ================================================================================================
 
-- (NSString *)actionPlistNameWithServiceState
-{
-    return [_plistName stringByAppendingString:[self stringWithServiceState]];
-}
-
 - (NSDictionary *)actionWith:(NSString *)actionId
 {
     if ([self contains:actionId])
@@ -124,19 +117,24 @@ static HTTPActionManager *uniqueInstance;
     return nil;
 }
 
-- (void)clearPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName
+- (void)addResourceWithBundle:(NSBundle *)bundle plistName:(NSString *)plistName
 {
-    NSString *key = [NSString stringWithFormat:@"%lu-%@", (unsigned long) bundle.hash, actionPlistName];
+    NSString *key = [NSString stringWithFormat:@"%lu-%@", (unsigned long) bundle.hash, plistName];
     if ([actionPlistDictionary objectForKey:key])
+        return;
+    
+    NSDictionary *rootDictionary = [bundle dictionaryWithPlistName:plistName];
+    if (rootDictionary == nil)
     {
-        NSDictionary *actions = [actionPlistDictionary objectForKey:key];
-        
-        for (NSString *key in actions)
-        {
-        	[actionPlist removeObjectForKey:key];
-        }
-        [actionPlistDictionary removeObjectForKey:key];
+#if DEBUG
+        NSLog(@"WARNING: %@.plist is missing.", plistName);
+#endif
+        return;
     }
+    
+    NSDictionary *actions = [rootDictionary objectForKey:@"Actions"];
+    [actionPlist addEntriesFromDictionary:actions];
+    [actionPlistDictionary setObject:actions forKey:key];
 }
 
 - (BOOL)contains:(NSString *)actionId
@@ -181,49 +179,21 @@ static HTTPActionManager *uniqueInstance;
     return object;
 }
 
-- (void)loadPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName
+- (void)removeResourceWithBundle:(NSBundle *)bundle plistName:(NSString *)plistName
 {
-    NSString *key = [NSString stringWithFormat:@"%lu-%@", (unsigned long) bundle.hash, actionPlistName];
+    NSString *key = [NSString stringWithFormat:@"%lu-%@", (unsigned long) bundle.hash, plistName];
     if ([actionPlistDictionary objectForKey:key])
-        return;
-    
-    NSDictionary *rootDictionary = [bundle dictionaryWithPlistName:actionPlistName];
-    if (rootDictionary == nil)
     {
-#if DEBUG
-        NSLog(@"WARNING: %@.plist is missing.", actionPlistName);
-#endif
-        return;
+        NSDictionary *actions = [actionPlistDictionary objectForKey:key];
+        
+        for (NSString *key in actions)
+        	[actionPlist removeObjectForKey:key];
+        
+        [actionPlistDictionary removeObjectForKey:key];
     }
-    
-    NSDictionary *actions = [rootDictionary objectForKey:@"Actions"];
-    [actionPlist addEntriesFromDictionary:actions];
-    [actionPlistDictionary setObject:actions forKey:key];
 }
 
-- (void)setServiceState:(HTTPActionServiceState)serviceState
-{
-    if (serviceState == _serviceState)
-        return;
-    
-    _serviceState = serviceState;
-    
-    if (_serviceState > HTTPActionServiceStateDisabled)
-        [self loadPlist:[NSBundle mainBundle] actionPlistName:[self actionPlistNameWithServiceState]];
-}
-
-- (NSString *)stringWithServiceState
-{
-    if (_serviceState == HTTPActionServiceStateLive)
-        return @"";
-    if (_serviceState == HTTPActionServiceStateDev)
-        return @"Dev";
-    if (_serviceState == HTTPActionServiceStateQA)
-        return @"QA";
-    return @"";
-}
-
-- (NSURLObject *)urlObjectWithRequstObject:(HTTPRequestObject *)object
+- (NSURLObject *)URLObjectWithRequstObject:(HTTPRequestObject *)object
 {
     NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
     return [urlObjectDic objectForKey:key];

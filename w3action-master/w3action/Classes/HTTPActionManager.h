@@ -29,18 +29,6 @@
 #import "NSData+Extensions.h"
 
 // ================================================================================================
-//  Enum
-// ================================================================================================
-
-enum {
-    HTTPActionServiceStateDisabled = 0,
-    HTTPActionServiceStateLive = 1,
-    HTTPActionServiceStateDev = 2,
-    HTTPActionServiceStateQA = 3
-};
-typedef int HTTPActionServiceState;
-
-// ================================================================================================
 //  Define
 // ================================================================================================
 
@@ -69,20 +57,16 @@ typedef int HTTPActionServiceState;
 @property (nonatomic) BOOL async;
 @property (nonatomic) BOOL useNetworkActivityIndicator;
 @property (nonatomic) NSTimeInterval timeInterval;
-@property (nonatomic) HTTPActionServiceState serviceState;
-@property (nonatomic, retain) NSString *plistName;
 @property (nonatomic, retain) NSDictionary *header;
 
 + (HTTPActionManager *)sharedInstance;
-- (NSString *)actionPlistNameWithServiceState;
 - (NSDictionary *)actionWith:(NSString *)actionId;
-- (void)clearPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName;
+- (void)addResourceWithBundle:(NSBundle *)bundle plistName:(NSString *)plistName;
 - (BOOL)contains:(NSString *)actionId;
 - (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error;
 - (HTTPRequestObject *)doActionWithRequestObject:(HTTPRequestObject *)object success:(SuccessBlock)success error:(ErrorBlock)error;
-- (void)loadPlist:(NSBundle *)bundle actionPlistName:(NSString *)actionPlistName;
-- (NSString *)stringWithServiceState;
-- (NSURLObject *)urlObjectWithRequstObject:(HTTPRequestObject *)object;
+- (void)removeResourceWithBundle:(NSBundle *)bundle plistName:(NSString *)plistName;
+- (NSURLObject *)URLObjectWithRequstObject:(HTTPRequestObject *)object;
 @end
 
 // ================================================================================================

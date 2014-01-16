@@ -25,5 +25,6 @@
 #import <Foundation/Foundation.h>
 
 @interface NSString (org_apache_w3action_NSString)
++ (NSString *)stringWithData:(NSData *)data;
 - (NSDictionary *)urlParameters;
 @end

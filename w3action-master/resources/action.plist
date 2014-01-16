@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Actions</key>
+	<dict>
+		<key>example</key>
+		<dict>
+			<key>url</key>
+			<string>https://github.com/pisces/w3action/tree/master/w3action-master/resource/example.geojson</string>
+			<key>method</key>
+			<string>GET</string>
+			<key>contentType</key>
+			<string>application/x-www-form-urlencoded</string>
+		</dict>
+		<key>example-multipart</key>
+		<dict>
+			<key>url</key>
+			<string>https://github.com/pisces/w3action/tree/master/w3action-master/resource/example-multipart.geojson</string>
+			<key>method</key>
+			<string>POST</string>
+			<key>contentType</key>
+			<string>multipart/form-data</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -25,6 +25,11 @@
 #import "NSString+w3action.h"
 
 @implementation NSString (org_apache_w3action_NSString)
++ (NSString *)stringWithData:(NSData *)data
+{
+    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
 - (NSDictionary *)urlParameters
 {
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
