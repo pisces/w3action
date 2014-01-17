@@ -235,8 +235,7 @@ static HTTPActionManager *uniqueInstance;
         return [APDocument documentWithXMLString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
     if ([dataType isEqualToString:DataTypeText])
         return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    
-    return nil;
+    return data;
 }
 
 - (NSURLRequest *)requestWithObject:(HTTPRequestObject *)object
