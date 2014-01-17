@@ -139,12 +139,13 @@
     
     MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"sample.png" data:data];
     
-    [[HTTPActionManager sharedInstance] doAction:@"example-multipart" param:nil body:object header:nil success:^(NSData *result){
+    [[HTTPActionManager sharedInstance] doAction:@"example-contenttype-multipart" param:nil body:object header:nil success:^(NSData *result){
         [monitor signal];
         XCTAssertNotNil(result);
-        XCTAssertNotNil([NSString stringWithData:result]);
+        XCTAssertTrue([result isKindOfClass:[NSDictionary class]]);
     } error:^(NSError *error){
         [monitor signal];
+        XCTAssertFalse(YES);
     }];
     
     [monitor wait];
