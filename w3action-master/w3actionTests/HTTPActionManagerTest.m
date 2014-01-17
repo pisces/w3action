@@ -49,11 +49,41 @@
     
     [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil header:nil success:^(id result){
         [monitor signal];
-        NSLog(@"result -> %@", result);
         XCTAssertNotNil(result);
         XCTAssertTrue([result isKindOfClass:[NSDictionary class]]);
     } error:^(NSError *error){
-        NSLog(@"error -> %@", error);
+        [monitor signal];
+        XCTAssertFalse(YES);
+    }];
+    
+    [monitor wait];
+}
+
+- (void)testDoActionWithDataTypeXML
+{
+    TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
+    
+    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-xml" param:nil body:nil header:nil success:^(id result){
+        [monitor signal];
+        XCTAssertNotNil(result);
+        XCTAssertTrue([result isKindOfClass:[APDocument class]]);
+    } error:^(NSError *error){
+        [monitor signal];
+        XCTAssertFalse(YES);
+    }];
+    
+    [monitor wait];
+}
+
+- (void)testDoActionWithDataTypeText
+{
+    TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
+    
+    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-text" param:nil body:nil header:nil success:^(id result){
+        [monitor signal];
+        XCTAssertNotNil(result);
+        XCTAssertTrue([result isKindOfClass:[NSString class]]);
+    } error:^(NSError *error){
         [monitor signal];
         XCTAssertFalse(YES);
     }];
@@ -65,7 +95,7 @@
 {
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
-    NSDictionary *action = [NSMutableDictionary dictionaryWithDictionary:[[HTTPActionManager sharedInstance] actionWith:@"example"]];
+    NSDictionary *action = [NSMutableDictionary dictionaryWithDictionary:[[HTTPActionManager sharedInstance] actionWith:@"example-datatype-json"]];
     [action setValue:@"method" forKey:HTTP_METHOD_POST];
     [action setValue:@"contentType" forKey:ContentTypeApplicationJSON];
     
@@ -76,7 +106,7 @@
     [[HTTPActionManager sharedInstance] doActionWithRequestObject:object success:^(NSData *result){
         [monitor signal];
         XCTAssertNotNil(result);
-        XCTAssertNotNil([NSString stringWithData:result]);
+        XCTAssertTrue([result isKindOfClass:[NSDictionary class]]);
     } error:^(NSError *error){
         [monitor signal];
         XCTAssertFalse(YES);
@@ -89,7 +119,7 @@
 {
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
-    __block HTTPRequestObject *object = [[HTTPActionManager sharedInstance] doAction:@"example" param:nil body:nil header:nil success:^(NSData *result){
+    __block HTTPRequestObject *object = [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil header:nil success:^(NSData *result){
         [monitor signal];
         XCTAssertNotNil([[HTTPActionManager sharedInstance] URLObjectWithRequstObject:object]);
     } error:^(NSError *error){
@@ -119,5 +149,4 @@
     
     [monitor wait];
 }
-
 @end

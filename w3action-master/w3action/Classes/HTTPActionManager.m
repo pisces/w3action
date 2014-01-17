@@ -162,9 +162,10 @@ static HTTPActionManager *uniqueInstance;
     if (_useNetworkActivityIndicator)
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
-    NSDictionary *action = [actionPlist objectForKey:actionId];
-    HTTPRequestObject *object = [HTTPRequestObject objectWithAction:action param:param body:body header:header success:success error:error];
+    HTTPRequestObject *object = [HTTPRequestObject objectWithAction:[actionPlist objectForKey:actionId] param:param body:body header:header success:success error:error];
+    
     [self doRequest:object];
+    
     return object;
 }
 
@@ -182,6 +183,7 @@ static HTTPActionManager *uniqueInstance;
     object.errorBlock = error;
     
     [self doRequest:object];
+    
     return object;
 }
 
@@ -201,8 +203,7 @@ static HTTPActionManager *uniqueInstance;
 
 - (NSURLObject *)URLObjectWithRequstObject:(HTTPRequestObject *)object
 {
-    NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
-    return [urlObjectDic objectForKey:key];
+    return [urlObjectDic objectForKey:[NSNumber numberWithUnsignedLong:object.hash]];
 }
 
 // ================================================================================================
@@ -230,6 +231,8 @@ static HTTPActionManager *uniqueInstance;
     
     if ([dataType isEqualToString:DataTypeJSON])
         return [data dictionaryWithUTF8JSONString];
+    if ([dataType isEqualToString:DataTypeXML])
+        return [APDocument documentWithXMLString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
     if ([dataType isEqualToString:DataTypeText])
         return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     

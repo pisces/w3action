@@ -30,6 +30,15 @@
 		23578C611872827F008101CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23578C601872827F008101CB /* UIKit.framework */; };
 		23578C6418728291008101CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23578C601872827F008101CB /* UIKit.framework */; };
 		23578C6518728292008101CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23578C601872827F008101CB /* UIKit.framework */; };
+		235E49AC18891EB100F14B4E /* APAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49A618891EB100F14B4E /* APAttribute.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		235E49AD18891EB100F14B4E /* APAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49A618891EB100F14B4E /* APAttribute.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		235E49AE18891EB100F14B4E /* APAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49A618891EB100F14B4E /* APAttribute.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		235E49AF18891EB100F14B4E /* APDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49A818891EB100F14B4E /* APDocument.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		235E49B018891EB100F14B4E /* APDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49A818891EB100F14B4E /* APDocument.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		235E49B118891EB100F14B4E /* APDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49A818891EB100F14B4E /* APDocument.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		235E49B218891EB100F14B4E /* APElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49AA18891EB100F14B4E /* APElement.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		235E49B318891EB100F14B4E /* APElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49AA18891EB100F14B4E /* APElement.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		235E49B418891EB100F14B4E /* APElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49AA18891EB100F14B4E /* APElement.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		236C29E8187259C80042279E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29E7187259C80042279E /* Foundation.framework */; };
 		236C29F6187259C80042279E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29F5187259C80042279E /* XCTest.framework */; };
 		236C29F7187259C80042279E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29E7187259C80042279E /* Foundation.framework */; };
@@ -98,6 +107,13 @@
 		233A580C1887CE2E00E3026B /* example.text */ = {isa = PBXFileReference; lastKnownFileType = text; path = example.text; sourceTree = "<group>"; };
 		233A580D1887CE2E00E3026B /* example.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = example.xml; sourceTree = "<group>"; };
 		23578C601872827F008101CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		235E49A518891EB100F14B4E /* APAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APAttribute.h; path = Classes/APAttribute.h; sourceTree = "<group>"; };
+		235E49A618891EB100F14B4E /* APAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APAttribute.m; path = Classes/APAttribute.m; sourceTree = "<group>"; };
+		235E49A718891EB100F14B4E /* APDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APDocument.h; path = Classes/APDocument.h; sourceTree = "<group>"; };
+		235E49A818891EB100F14B4E /* APDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APDocument.m; path = Classes/APDocument.m; sourceTree = "<group>"; };
+		235E49A918891EB100F14B4E /* APElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APElement.h; path = Classes/APElement.h; sourceTree = "<group>"; };
+		235E49AA18891EB100F14B4E /* APElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APElement.m; path = Classes/APElement.m; sourceTree = "<group>"; };
+		235E49AB18891EB100F14B4E /* APXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APXML.h; path = Classes/APXML.h; sourceTree = "<group>"; };
 		236C29E4187259C80042279E /* libw3action-Device.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libw3action-Device.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		236C29E7187259C80042279E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		236C29EB187259C80042279E /* w3action-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "w3action-Prefix.pch"; sourceTree = "<group>"; };
@@ -175,6 +191,20 @@
 			path = resources;
 			sourceTree = "<group>";
 		};
+		235E49A418891E5700F14B4E /* APXML */ = {
+			isa = PBXGroup;
+			children = (
+				235E49A518891EB100F14B4E /* APAttribute.h */,
+				235E49A618891EB100F14B4E /* APAttribute.m */,
+				235E49A718891EB100F14B4E /* APDocument.h */,
+				235E49A818891EB100F14B4E /* APDocument.m */,
+				235E49A918891EB100F14B4E /* APElement.h */,
+				235E49AA18891EB100F14B4E /* APElement.m */,
+				235E49AB18891EB100F14B4E /* APXML.h */,
+			);
+			name = APXML;
+			sourceTree = "<group>";
+		};
 		236C29DB187259C80042279E = {
 			isa = PBXGroup;
 			children = (
@@ -209,6 +239,7 @@
 		236C29E9187259C80042279E /* w3action */ = {
 			isa = PBXGroup;
 			children = (
+				235E49A418891E5700F14B4E /* APXML */,
 				2385BD61187A90CC00ADCD52 /* JSONKit */,
 				233A57E81887708800E3026B /* TRVSMonitor */,
 				23B96EB318726F5D0040D283 /* Classes */,
@@ -405,10 +436,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				23B96EC418726F5D0040D283 /* NSData+Extensions.m in Sources */,
+				235E49B218891EB100F14B4E /* APElement.m in Sources */,
 				23B96EC018726F5D0040D283 /* HTTPRequestObject.m in Sources */,
+				235E49AF18891EB100F14B4E /* APDocument.m in Sources */,
 				233A57EB188770A600E3026B /* TRVSMonitor.m in Sources */,
 				2385BD64187A90DC00ADCD52 /* JSONKit.m in Sources */,
 				23B96EC618726F5D0040D283 /* w3action.m in Sources */,
+				235E49AC18891EB100F14B4E /* APAttribute.m in Sources */,
 				23EFAF46187ABBB300BA048F /* NSString+w3action.m in Sources */,
 				23B96EBE18726F5D0040D283 /* HTTPActionManager.m in Sources */,
 			);
@@ -419,14 +453,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				236C2A04187259C80042279E /* w3actionTests.m in Sources */,
+				235E49B418891EB100F14B4E /* APElement.m in Sources */,
 				23EFAF48187ABBB300BA048F /* NSString+w3action.m in Sources */,
 				23B96EC718726F5D0040D283 /* w3action.m in Sources */,
 				233A57ED188770A600E3026B /* TRVSMonitor.m in Sources */,
 				23B96EC118726F5D0040D283 /* HTTPRequestObject.m in Sources */,
 				233A57F91887877F00E3026B /* HTTPActionManagerTest.m in Sources */,
 				23B96EBF18726F5D0040D283 /* HTTPActionManager.m in Sources */,
+				235E49B118891EB100F14B4E /* APDocument.m in Sources */,
 				2385BD66187A90DC00ADCD52 /* JSONKit.m in Sources */,
 				23B96EC518726F5D0040D283 /* NSData+Extensions.m in Sources */,
+				235E49AE18891EB100F14B4E /* APAttribute.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,10 +472,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				23B96ECD187270B70040D283 /* NSData+Extensions.m in Sources */,
+				235E49B318891EB100F14B4E /* APElement.m in Sources */,
 				23B96ECE187270B70040D283 /* HTTPRequestObject.m in Sources */,
+				235E49B018891EB100F14B4E /* APDocument.m in Sources */,
 				233A57EC188770A600E3026B /* TRVSMonitor.m in Sources */,
 				2385BD65187A90DC00ADCD52 /* JSONKit.m in Sources */,
 				23B96ECF187270B70040D283 /* w3action.m in Sources */,
+				235E49AD18891EB100F14B4E /* APAttribute.m in Sources */,
 				23EFAF47187ABBB300BA048F /* NSString+w3action.m in Sources */,
 				23B96ED1187270B70040D283 /* HTTPActionManager.m in Sources */,
 			);
