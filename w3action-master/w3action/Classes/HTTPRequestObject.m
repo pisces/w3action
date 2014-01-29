@@ -36,7 +36,7 @@
 //  Class method
 // ================================================================================================
 
-+ (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error
++ (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSDictionary *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error
 {
     HTTPRequestObject *instance = [[HTTPRequestObject alloc] init];
     instance.action = action;
@@ -70,7 +70,7 @@
     return [_paramString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
-- (void)setParam:(NSObject *)param
+- (void)setParam:(NSDictionary *)param
 {
     if ([param isEqual:_param])
         return;
@@ -82,13 +82,7 @@
         return;
     
     _param = param;
-    
-    if ([_param isKindOfClass:[NSString class]]) {
-        _paramString = (NSString *) _param;
-    } else if ([_param isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *dic = (NSDictionary *) _param;
-        _paramString = [dic urlString];
-    }
+    _paramString = [_param urlString];
 }
 @end
 

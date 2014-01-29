@@ -240,13 +240,11 @@ static HTTPActionManager *uniqueInstance;
 
 - (NSURLRequest *)requestWithObject:(HTTPRequestObject *)object
 {
-    NSString *orgUrl = [object.action objectForKey:HTTPActionURLKey];
     NSString *method = [object.action objectForKey:HTTPActionMethodKey];
     NSString *contentType = [object.action objectForKey:HTTPActionContentTypeKey];
-    NSTimeInterval timeInterval = [object.action objectForKey:HTTPActionTimeoutKey] ?  [[object.action objectForKey:HTTPActionTimeoutKey] doubleValue] : _timeInterval;
-    NSString *url = (object.param != nil && [method isEqualToString:HTTP_METHOD_GET]) ? [orgUrl stringByAppendingFormat:@"?%@", [object paramWithUTF8StringEncoding]] : orgUrl;
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeInterval];
+    NSTimeInterval timeInterval = [object.action objectForKey:HTTPActionTimeoutKey] ? [[object.action objectForKey:HTTPActionTimeoutKey] doubleValue] : _timeInterval;
+    NSURL *url = [self URLWithObject:object];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeInterval];
     
     [request setHTTPMethod:method];
     
@@ -262,7 +260,7 @@ static HTTPActionManager *uniqueInstance;
             [request setValue:[object.header objectForKey:key] forHTTPHeaderField:key];
     }
 #if DEBUG
-    NSLog(@"\nRequest Start -----------------------------------------\norgUrl -> %@,\nurl -> %@,\ncontentType -> %@,\n method -> %@,\n header -> %@,\n param -> %@", orgUrl, url, contentType, method, request.allHTTPHeaderFields, object.param);
+    NSLog(@"\nRequest Start -----------------------------------------\norgUrl -> %@,\nurl -> %@,\ncontentType -> %@,\n method -> %@,\n header -> %@,\n param -> %@", [object.action objectForKey:HTTPActionURLKey], url, contentType, method, request.allHTTPHeaderFields, object.param);
 #endif
     if ([contentType isEqualToString:ContentTypeMultipartFormData])
     {
@@ -364,6 +362,36 @@ static HTTPActionManager *uniqueInstance;
         
         [urlObjectDic removeObjectForKey:key];
     });
+}
+
+- (NSURL *)URLWithObject:(HTTPRequestObject *)object
+{
+    NSString *method = [object.action objectForKey:HTTPActionMethodKey];
+    NSString *stringOfURL = [object.action objectForKey:HTTPActionURLKey];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{.*?\\}" options:0 error:nil];
+    NSArray *matches = [regex matchesInString:stringOfURL options:0 range:(NSRange) {0, stringOfURL.length}];
+    if (matches.count > 0)
+    {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:object.param];
+        
+        for (NSTextCheckingResult *result in matches)
+        {
+            NSRegularExpression *propertyNameRegex = [NSRegularExpression regularExpressionWithPattern:@"\\{|\\}" options:0 error:nil];
+            NSString *matchedString = [stringOfURL substringWithRange:result.range];
+            NSString *propertyName = [propertyNameRegex stringByReplacingMatchesInString:matchedString options:0 range:(NSRange) {0, matchedString.length} withTemplate:@""];
+            NSString *replaceString = [object.param objectForKey:propertyName];
+            stringOfURL = [regex stringByReplacingMatchesInString:stringOfURL options:0 range:result.range withTemplate:replaceString];
+            
+            [param removeObjectForKey:propertyName];
+        }
+        
+        object.param = param;
+    }
+    
+    if ([method isEqualToString:HTTP_METHOD_GET] && object.param && object.param.count > 0)
+        stringOfURL = [stringOfURL stringByAppendingFormat:@"?%@", [object paramWithUTF8StringEncoding]];
+    
+     return [NSURL URLWithString:stringOfURL];
 }
 @end
 

@@ -31,7 +31,7 @@ typedef void (^ErrorBlock)(NSError *error);
 @property(nonatomic, retain) NSDictionary *action;
 @property(nonatomic, retain) id body;
 @property(nonatomic, retain) NSDictionary *header;
-@property(nonatomic, retain) NSObject *param;
+@property(nonatomic, retain) NSDictionary *param;
 @property(nonatomic, readonly, retain) NSString *paramString;
 @property(nonatomic, copy) SuccessBlock successBlock;
 @property(nonatomic, copy) ErrorBlock errorBlock;
