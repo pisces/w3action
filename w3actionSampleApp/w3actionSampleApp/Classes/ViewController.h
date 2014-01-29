@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <w3action/w3action.h>
 
 @interface ViewController : UIViewController
-
+@property (nonatomic, retain) IBOutlet UITextView *textView;
 @end
