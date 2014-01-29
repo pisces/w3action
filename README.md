@@ -102,7 +102,7 @@
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
 }];
-'''
+```
 
 #### Data Type XML
 ```objective-c
@@ -112,7 +112,7 @@
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
 }];
-'''
+```
 
 #### Data Type Text
 ```objective-c
@@ -122,7 +122,7 @@
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
 }];
-'''
+```
 
 #### Multipart Form Data
 ```objective-c
@@ -136,7 +136,7 @@ MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
 }];
-'''
+```
 
 #### URL Path Parameters
 ```objective-c
@@ -148,7 +148,7 @@ NSDictionary *param = @{@"resourceFolderName": @"resources"};
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
 }];
-'''
+```
 
 #### Use directly not use config file
 ```objective-c
@@ -168,7 +168,7 @@ object.param = @{@"p1": @"easy", @"p2": @"simple"};
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
 }];
-'''
+```
 
 
 ## License
