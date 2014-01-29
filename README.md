@@ -2,22 +2,21 @@
 
 ## Usage
 ### Implementation
-```
-objective-c
+```objective-c
 // load config plist file 
-[[HTTPActionManager sharedInstance] addResourceWithBundle:[NSBundle bundleForClass:[self class]] plistName:@"action"];
+[[HTTPActionManager sharedInstance] addResourceWithBundle:[NSBundle mainBundle] plistName:@"action"];
     
 // execution
-[[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil header:nil success:^(NSDictionary *result){
-        NSLog(@"JSON result -> %@", result);
+[[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" 
+	param:nil body:nil header:nil success:^(NSDictionary *result){
+	NSLog(@"JSON result -> %@", result);
 } error:^(NSError *error){
-        NSLog(@"error -> %@", error);
+	NSLog(@"error -> %@", error);
 }];
 ```
 
 ### Configuration
-```
-xml
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -92,8 +91,84 @@ xml
 	</dict>
 </dict>
 </plist>
-
 ```
+
+### Sample
+#### Data Type JSON
+```objective-c
+[[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" 
+	param:nil body:nil header:nil success:^(NSDictionary *result){
+	NSLog(@"JSON result -> %@", result);
+} error:^(NSError *error){
+	NSLog(@"error -> %@", error);
+}];
+'''
+
+#### Data Type XML
+```objective-c
+[[HTTPActionManager sharedInstance] doAction:@"example-datatype-xml" 
+	param:nil body:nil header:nil success:^(APDocument *result){
+	NSLog(@"XML result -> %@", result);
+} error:^(NSError *error){
+	NSLog(@"error -> %@", error);
+}];
+'''
+
+#### Data Type Text
+```objective-c
+[[HTTPActionManager sharedInstance] doAction:@"example-datatype-text" 
+	param:nil body:nil header:nil success:^(NSString *result){
+	NSLog(@"Text result -> %@", result);
+} error:^(NSError *error){
+	NSLog(@"error -> %@", error);
+}];
+'''
+
+#### Multipart Form Data
+```objective-c
+UIImage *image = [[UIImage alloc] init];
+NSData *imageData = UIImagePNGRepresentation(image);
+MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"sample.png" data:imageData];
+    
+[[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" 
+	param:nil body:object header:nil success:^(NSString *result){
+	NSLog(@"JSON result -> %@", result);
+} error:^(NSError *error){
+	NSLog(@"error -> %@", error);
+}];
+'''
+
+#### URL Path Parameters
+```objective-c
+NSDictionary *param = @{@"resourceFolderName": @"resources"};
+    
+[[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" 
+	param:nil body:object header:nil success:^(NSString *result){
+	NSLog(@"JSON result -> %@", result);
+} error:^(NSError *error){
+	NSLog(@"error -> %@", error);
+}];
+'''
+
+#### Use directly not use config file
+```objective-c
+NSDictionary *action = [NSMutableDictionary dictionary];
+[action setValue:@"url" forKey:@"https://raw.github.com/pisces/w3action/master/w3action-master/resources/example.json"
+[action setValue:@"method" forKey:HTTP_METHOD_POST];
+[action setValue:@"contentType" forKey:ContentTypeApplicationJSON];
+[action setValue:@"dataType" forKey:DataTypeJSON];
+[action setValue:@"timeout" forKey:@"10"];
+    
+HTTPRequestObject *object = [[HTTPRequestObject alloc] init];
+object.action = action;
+object.param = @{@"p1": @"easy", @"p2": @"simple"};
+    
+[[HTTPActionManager sharedInstance] doActionWithRequestObject:object success:^(NSDictionary *result){
+	NSLog(@"JSON result -> %@", result);
+} error:^(NSError *error){
+	NSLog(@"error -> %@", error);
+}];
+'''
 
 
 ## License
