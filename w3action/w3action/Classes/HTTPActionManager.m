@@ -379,7 +379,8 @@ static HTTPActionManager *uniqueInstance;
             NSRegularExpression *propertyNameRegex = [NSRegularExpression regularExpressionWithPattern:@"\\{|\\}" options:0 error:nil];
             NSString *matchedString = [stringOfURL substringWithRange:result.range];
             NSString *propertyName = [propertyNameRegex stringByReplacingMatchesInString:matchedString options:0 range:(NSRange) {0, matchedString.length} withTemplate:@""];
-            NSString *replaceString = [object.param objectForKey:propertyName];
+            id value = [object.param objectForKey:propertyName];
+            NSString *replaceString = [NSString stringWithFormat:@"%@", value];
             stringOfURL = [regex stringByReplacingMatchesInString:stringOfURL options:0 range:result.range withTemplate:replaceString];
             
             [param removeObjectForKey:propertyName];
