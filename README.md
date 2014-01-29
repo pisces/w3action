@@ -130,7 +130,7 @@ UIImage *image = [[UIImage alloc] init];
 NSData *imageData = UIImagePNGRepresentation(image);
 MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"sample.png" data:imageData];
     
-[[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" 
+[[HTTPActionManager sharedInstance] doAction:@"example-contenttype-multipart" 
 	param:nil body:object header:nil success:^(NSString *result){
 	NSLog(@"JSON result -> %@", result);
 } error:^(NSError *error){
@@ -142,7 +142,7 @@ MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"
 ```objective-c
 NSDictionary *param = @{@"resourceFolderName": @"resources"};
     
-[[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" 
+[[HTTPActionManager sharedInstance] doAction:@"example-datatype-text" 
 	param:nil body:object header:nil success:^(NSString *result){
 	NSLog(@"JSON result -> %@", result);
 } error:^(NSError *error){
