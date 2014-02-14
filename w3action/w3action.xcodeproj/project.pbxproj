@@ -14,6 +14,8 @@
 				23B96EDF187271270040D283 /* ShellScript */,
 			);
 			dependencies = (
+				23BC2D6E18AC8C7E00A71CFC /* PBXTargetDependency */,
+				23BC2D7018AC8C7E00A71CFC /* PBXTargetDependency */,
 			);
 			name = "w3action-Framework";
 			productName = "w3action-Framework";
@@ -73,6 +75,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 236C29E3187259C80042279E;
 			remoteInfo = w3action;
+		};
+		23BC2D6D18AC8C7E00A71CFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 236C29DC187259C80042279E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 236C29E3187259C80042279E;
+			remoteInfo = "w3action-Device";
+		};
+		23BC2D6F18AC8C7E00A71CFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 236C29DC187259C80042279E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 23B96ECA187270B70040D283;
+			remoteInfo = "w3action-Simulator";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -426,7 +442,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SIMULATOR_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}-Simulator.a\" &&\nDEVICE_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}-Device.a\" &&\nUNIVERSAL_LIBRARY_DIR=\"/Users/Shared/Frameworks\" &&\nUNIVERSAL_LIBRARY_PATH=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}\" &&\nFRAMEWORK=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}.framework\" &&\nPROJECT_PATH=\"/Users/${USER}/workspace/pisces/ios/frameworks/${PRODUCT_NAME}/${PRODUCT_NAME}-master\" &&\n\n# Create framework directory structure.\nrm -rf \"${FRAMEWORK}\" &&\nmkdir -p \"${UNIVERSAL_LIBRARY_DIR}\" &&\nmkdir -p \"${FRAMEWORK}/Headers\" &&\n\n# Generate universal binary for the device and simulator.\nlipo \"${SIMULATOR_LIBRARY_PATH}\" \"${DEVICE_LIBRARY_PATH}\" -create -output \"${UNIVERSAL_LIBRARY_PATH}\" &&\n\n# Move files to appropriate locations in framework paths.\nmv \"${UNIVERSAL_LIBRARY_PATH}\" \"${FRAMEWORK}\" &&\n\n# Copy header files from project\ncd \"/${PROJECT_PATH}/${PRODUCT_NAME}/Classes/\" &&\nfind . -name '*.h' | cpio -pdm \"${FRAMEWORK}/Headers\"";
+			shellScript = "SIMULATOR_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}-Simulator.a\" &&\nDEVICE_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}-Device.a\" &&\nUNIVERSAL_LIBRARY_DIR=\"/Users/Shared/Frameworks\" &&\nUNIVERSAL_LIBRARY_PATH=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}\" &&\nFRAMEWORK=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}.framework\" &&\nPROJECT_PATH=\"/Users/${USER}/workspace/pisces/ios/frameworks/${PRODUCT_NAME}/${PRODUCT_NAME}\" &&\n\n# Create framework directory structure.\nrm -rf \"${FRAMEWORK}\" &&\nmkdir -p \"${UNIVERSAL_LIBRARY_DIR}\" &&\nmkdir -p \"${FRAMEWORK}/Headers\" &&\n\n# Generate universal binary for the device and simulator.\nlipo \"${SIMULATOR_LIBRARY_PATH}\" \"${DEVICE_LIBRARY_PATH}\" -create -output \"${UNIVERSAL_LIBRARY_PATH}\" &&\n\n# Move files to appropriate locations in framework paths.\nmv \"${UNIVERSAL_LIBRARY_PATH}\" \"${FRAMEWORK}\" &&\n\n# Copy header files from project\ncd \"/${PROJECT_PATH}/${PRODUCT_NAME}/Classes/\" &&\nfind . -name '*.h' | cpio -pdm \"${FRAMEWORK}/Headers\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -491,6 +507,16 @@
 			isa = PBXTargetDependency;
 			target = 236C29E3187259C80042279E /* w3action-Device */;
 			targetProxy = 236C29FA187259C80042279E /* PBXContainerItemProxy */;
+		};
+		23BC2D6E18AC8C7E00A71CFC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 236C29E3187259C80042279E /* w3action-Device */;
+			targetProxy = 23BC2D6D18AC8C7E00A71CFC /* PBXContainerItemProxy */;
+		};
+		23BC2D7018AC8C7E00A71CFC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 23B96ECA187270B70040D283 /* w3action-Simulator */;
+			targetProxy = 23BC2D6F18AC8C7E00A71CFC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

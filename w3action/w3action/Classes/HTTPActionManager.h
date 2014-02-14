@@ -58,7 +58,6 @@
 // ================================================================================================
 
 @interface HTTPActionManager : NSObject <NSURLConnectionDelegate>
-@property (nonatomic) BOOL async;
 @property (nonatomic) BOOL useNetworkActivityIndicator;
 @property (nonatomic) NSTimeInterval timeInterval;
 @property (nonatomic, retain) NSDictionary *header;

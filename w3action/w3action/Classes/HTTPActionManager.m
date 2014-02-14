@@ -24,6 +24,7 @@
 
 #import "HTTPActionManager.h"
 
+#define HTTPActionAsyncKey @"aync"
 #define HTTPActionContentTypeKey @"contentType"
 #define HTTPActionDataTypeKey @"dataType"
 #define HTTPActionMethodKey @"method"
@@ -102,7 +103,6 @@ static HTTPActionManager *uniqueInstance;
     if (self)
     {
         queue = dispatch_queue_create("org.apache.w3action.HTTPActionManager", NULL);
-        _async = YES;
         _useNetworkActivityIndicator = YES;
         _timeInterval = 10;
         actionPlist = [[NSMutableDictionary alloc] init];
@@ -214,7 +214,9 @@ static HTTPActionManager *uniqueInstance;
 {
     dispatch_async(queue, ^(void){
         NSURLRequest *request = [self requestWithObject:object];
-        if (_async)
+        BOOL async = [[object.action objectForKey:HTTPActionAsyncKey] boolValue];
+        
+        if (async)
             [self sendAsynchronousRequest:request withObject:object];
         else
             [self sendSynchronousRequest:request withObject:object];
@@ -308,7 +310,7 @@ static HTTPActionManager *uniqueInstance;
     CallError callError = ^void(NSError *error) {
         object.errorBlock(error);
 #if DEBUG
-        NSLog(@"HTTPAction error -> %@", error);
+        NSLog(@"\nsendAsynchronousRequest error -> %@", error);
 #endif
     };
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError){
@@ -317,17 +319,17 @@ static HTTPActionManager *uniqueInstance;
             [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:_response] forKey:key];
         
         dispatch_async(dispatch_get_main_queue(), ^{
+#if DEBUG
+            NSLog(@"_response.statusCode -> %li", (long) _response.statusCode);
+#endif
             if (connectionError) {
                 callError(connectionError);
             } else {
-#if DEBUG
-                NSLog(@"_response.statusCode -> %d", _response.statusCode);
-#endif
                 if (_response.statusCode >= 200 && _response.statusCode <= 304) {
                     NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
                     object.successBlock([self resultWithData:data dataType:dataType]);
 #if DEBUG
-                    NSLog(@"\nasynchronousRequest success -> %@", [data dictionaryWithUTF8JSONString]);
+                    NSLog(@"\nsendAsynchronousRequest success -> %@", [data dictionaryWithUTF8JSONString]);
 #endif
                 } else {
                     callError([NSError errorWithDomain:@"Unknown http error." code:_response.statusCode userInfo:@{@"data": data}]);
@@ -345,18 +347,18 @@ static HTTPActionManager *uniqueInstance;
 {
     NSError *error = nil;
     NSHTTPURLResponse *response = nil;
-    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-#if DEBUG
-    NSLog(@"\nsynchronousRequest result, error -> %@, %@", [result dictionaryWithUTF8JSONString], error);
-#endif
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSLog(@"\nsynchronousRequest result, error -> %@, %@", [data dictionaryWithUTF8JSONString], error);
     NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
     [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (error != nil)
+        if (error != nil) {
             object.errorBlock(error);
-        else
-            object.successBlock(result);
+        } else {
+            NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
+            object.successBlock([self resultWithData:data dataType:dataType]);
+        }
         
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         
