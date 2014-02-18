@@ -35,6 +35,8 @@
 			<string>json</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<false/>
 		</dict>
 		<key>example-datatype-xml</key>
 		<dict>
@@ -48,6 +50,8 @@
 			<string>xml</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<false/>
 		</dict>
 		<key>example-datatype-text</key>
 		<dict>
@@ -61,6 +65,8 @@
 			<string>text</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<false/>
 		</dict>
 		<key>example-contenttype-multipart</key>
 		<dict>
@@ -74,6 +80,8 @@
 			<string>json</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<false/>
 		</dict>
 		<key>example-path-param</key>
 		<dict>
@@ -87,6 +95,8 @@
 			<string>json</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<false/>
 		</dict>
 	</dict>
 </dict>
