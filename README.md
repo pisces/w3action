@@ -180,6 +180,9 @@ object.param = @{@"p1": @"easy", @"p2": @"simple"};
 }];
 ```
 
+<p align="center" >
+  <img src="http://pisces.jdsn.net/w3action/IMG_0045.PNG" alt="w3action" title="w3action">
+</p>
 
 ## License
 Copyright 2013 KH Kim, hh963103@gmail.com
@@ -195,7 +198,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-<p align="center" >
-  <img src="http://pisces.jdsn.net/w3action/IMG_0045.PNG" alt="w3action" title="w3action">
-</p>
