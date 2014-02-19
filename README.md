@@ -181,7 +181,7 @@ object.param = @{@"p1": @"easy", @"p2": @"simple"};
 ```
 
 <p align="center" >
-  <img src="http://pisces.jdsn.net/w3action/IMG_0045.PNG" alt="w3action" title="w3action">
+  <img src="http://pisces.jdsn.net/w3action/IMG_0045.png" alt="w3action" title="w3action">
 </p>
 
 ## License
