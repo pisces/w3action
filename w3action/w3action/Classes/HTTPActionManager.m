@@ -329,7 +329,7 @@ static HTTPActionManager *uniqueInstance;
                     NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
                     object.successBlock([self resultWithData:data dataType:dataType]);
 #if DEBUG
-                    NSLog(@"\nsendAsynchronousRequest success -> %@", [data dictionaryWithUTF8JSONString]);
+                    NSLog(@"\nsendAsynchronousRequest success -> %@, %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
 #endif
                 } else {
                     callError([NSError errorWithDomain:@"Unknown http error." code:_response.statusCode userInfo:@{@"data": data}]);
@@ -348,7 +348,9 @@ static HTTPActionManager *uniqueInstance;
     NSError *error = nil;
     NSHTTPURLResponse *response = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSLog(@"\nsynchronousRequest result, error -> %@, %@", [data dictionaryWithUTF8JSONString], error);
+#if DEBUG
+    NSLog(@"\nsynchronousRequest result, error -> %@, %@, %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString], error);
+#endif
     NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
     [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
     
