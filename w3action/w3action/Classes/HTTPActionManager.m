@@ -91,7 +91,7 @@ static HTTPActionManager *uniqueInstance;
 {
     dispatch_release(queue);
     
-    _header = nil;
+    _headers = nil;
     actionPlist = nil;
     actionPlistDictionary = nil;
     urlObjectDic = nil;
@@ -105,6 +105,7 @@ static HTTPActionManager *uniqueInstance;
         queue = dispatch_queue_create("org.apache.w3action.HTTPActionManager", NULL);
         _useNetworkActivityIndicator = YES;
         _timeInterval = 10;
+        _headers = [NSMutableDictionary dictionary];
         actionPlist = [[NSMutableDictionary alloc] init];
         actionPlistDictionary = [[NSMutableDictionary alloc] init];
         urlObjectDic = [[NSMutableDictionary alloc] init];
@@ -149,7 +150,7 @@ static HTTPActionManager *uniqueInstance;
     return [actionPlist objectForKey:actionId] != nil;
 }
 
-- (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error
+- (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body headers:(NSDictionary *)headers success:(SuccessBlock)success error:(ErrorBlock)error
 {
     if (![self contains:actionId])
     {
@@ -162,7 +163,7 @@ static HTTPActionManager *uniqueInstance;
     if (_useNetworkActivityIndicator)
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
-    HTTPRequestObject *object = [HTTPRequestObject objectWithAction:[actionPlist objectForKey:actionId] param:param body:body header:header success:success error:error];
+    HTTPRequestObject *object = [HTTPRequestObject objectWithAction:[actionPlist objectForKey:actionId] param:param body:body headers:headers success:success error:error];
     
     [self doRequest:object];
     
@@ -250,16 +251,16 @@ static HTTPActionManager *uniqueInstance;
     
     [request setHTTPMethod:method];
     
-    if (_header)
+    if (_headers)
     {
-        for (NSString *key in _header)
-            [request setValue:[_header objectForKey:key] forHTTPHeaderField:key];
+        for (NSString *key in _headers)
+            [request setValue:[_headers objectForKey:key] forHTTPHeaderField:key];
     }
     
-    if (object.header)
+    if (object.headers)
     {
-        for (NSString *key in object.header)
-            [request setValue:[object.header objectForKey:key] forHTTPHeaderField:key];
+        for (NSString *key in object.headers)
+            [request setValue:[object.headers objectForKey:key] forHTTPHeaderField:key];
     }
 #if DEBUG
     NSLog(@"\nRequest Start -----------------------------------------\norgUrl -> %@,\nurl -> %@,\ncontentType -> %@,\n method -> %@,\n header -> %@,\n param -> %@", [object.action objectForKey:HTTPActionURLKey], url, contentType, method, request.allHTTPHeaderFields, object.param);

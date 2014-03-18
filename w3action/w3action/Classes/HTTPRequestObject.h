@@ -30,12 +30,12 @@ typedef void (^ErrorBlock)(NSError *error);
 @interface HTTPRequestObject : NSObject <NSURLConnectionDelegate>
 @property(nonatomic, retain) NSDictionary *action;
 @property(nonatomic, retain) id body;
-@property(nonatomic, retain) NSDictionary *header;
+@property(nonatomic, retain) NSDictionary *headers;
 @property(nonatomic, retain) NSDictionary *param;
 @property(nonatomic, readonly, retain) NSString *paramString;
 @property(nonatomic, copy) SuccessBlock successBlock;
 @property(nonatomic, copy) ErrorBlock errorBlock;
-+ (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error;
++ (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body headers:(NSDictionary *)headers success:(SuccessBlock)success error:(ErrorBlock)error;
 - (NSString *)paramWithUTF8StringEncoding;
 @end
 

@@ -36,13 +36,13 @@
 //  Class method
 // ================================================================================================
 
-+ (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSDictionary *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error
++ (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSDictionary *)param body:(id)body headers:(NSDictionary *)headers success:(SuccessBlock)success error:(ErrorBlock)error
 {
     HTTPRequestObject *instance = [[HTTPRequestObject alloc] init];
     instance.action = action;
     instance.body = body;
     instance.param = param;
-    instance.header = header;
+    instance.headers = headers;
     instance.successBlock = success;
     instance.errorBlock = error;
     return instance;
@@ -56,7 +56,7 @@
 {
     _action = nil;
     _body = nil;
-    _header = nil;
+    _headers = nil;
     _param = nil;
     _paramString = nil;
 }
