@@ -43,6 +43,17 @@
 #define HTTP_METHOD_GET @"GET"
 #define HTTP_METHOD_POST @"POST"
 
+enum HTTPStatusCode {
+    HTTPStatusCodeOK = 200,
+    HTTPStatusCodeCachedOk = 304,
+    HTTPStatusCodeBadRequest = 400,
+    HTTPStatusCodeUnauthorized = 401,
+    HTTPStatusCodeForbidden = 403,
+    HTTPStatusCodeNotFound = 404,
+    HTTPStatusCodeBadGateway = 502,
+    HTTPStatusCodeServiceUnavailable = 503
+};
+
 // ================================================================================================
 //  NSURLObject
 // ================================================================================================
@@ -58,6 +69,7 @@
 // ================================================================================================
 
 @interface HTTPActionManager : NSObject <NSURLConnectionDelegate>
+@property (nonatomic) BOOL async;
 @property (nonatomic) BOOL useNetworkActivityIndicator;
 @property (nonatomic) NSTimeInterval timeInterval;
 @property (nonatomic, readonly) NSMutableDictionary *headers;

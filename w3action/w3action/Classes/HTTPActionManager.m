@@ -215,7 +215,8 @@ static HTTPActionManager *uniqueInstance;
 {
     dispatch_async(queue, ^(void){
         NSURLRequest *request = [self requestWithObject:object];
-        BOOL async = [[object.action objectForKey:HTTPActionAsyncKey] boolValue];
+        id asyncOption = [object.action objectForKey:HTTPActionAsyncKey];
+        BOOL async = asyncOption ? [asyncOption boolValue] : _async;
         
         if (async)
             [self sendAsynchronousRequest:request withObject:object];
@@ -225,6 +226,13 @@ static HTTPActionManager *uniqueInstance;
 #if DEBUG
     NSLog(@"Request End -----------------------------------------");
 #endif
+}
+
+- (NSError *)errorWithError:(NSError *)error data:(NSData *)data
+{
+    NSMutableDictionary *userInfo = error.userInfo ? [NSMutableDictionary dictionaryWithDictionary:error.userInfo] : [NSMutableDictionary dictionary];
+    [userInfo setObject:data forKey:@"data"];
+    return [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
 }
 
 - (id)resultWithData:(NSData *)data dataType:(NSString *)dataType
@@ -307,9 +315,9 @@ static HTTPActionManager *uniqueInstance;
 
 - (void)sendAsynchronousRequest:(NSURLRequest *)request withObject:(HTTPRequestObject *)object
 {
-    typedef void (^CallError)(NSError *error);
-    CallError callError = ^void(NSError *error) {
-        object.errorBlock(error);
+    typedef void (^CallError)(NSError *error, NSData *data);
+    CallError callError = ^void(NSError *error, NSData *data) {
+        object.errorBlock([self errorWithError:error data:data]);
 #if DEBUG
         NSLog(@"\nsendAsynchronousRequest error -> %@", error);
 #endif
@@ -324,16 +332,16 @@ static HTTPActionManager *uniqueInstance;
             NSLog(@"_response.statusCode -> %li", (long) _response.statusCode);
 #endif
             if (connectionError) {
-                callError(connectionError);
+                callError(connectionError, nil);
             } else {
-                if (_response.statusCode >= 200 && _response.statusCode <= 304) {
+                if (_response.statusCode >= HTTPStatusCodeOK && _response.statusCode <= HTTPStatusCodeCachedOk) {
                     NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
                     object.successBlock([self resultWithData:data dataType:dataType]);
 #if DEBUG
                     NSLog(@"\nsendAsynchronousRequest success -> %@, %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
 #endif
                 } else {
-                    callError([NSError errorWithDomain:@"Unknown http error." code:_response.statusCode userInfo:@{@"data": data}]);
+                    callError([NSError errorWithDomain:@"Unknown http error." code:_response.statusCode userInfo:nil], data);
                 }
             }
             
@@ -350,14 +358,14 @@ static HTTPActionManager *uniqueInstance;
     NSHTTPURLResponse *response = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 #if DEBUG
-    NSLog(@"\nsynchronousRequest result, error -> %@, %@, %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString], error);
+    NSLog(@"\nsynchronousRequest result, error -> %@, %@, %@, %d", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString], error, response.statusCode);
 #endif
     NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
     [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         if (error != nil) {
-            object.errorBlock(error);
+            object.errorBlock([self errorWithError:error data:data]);
         } else {
             NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
             object.successBlock([self resultWithData:data dataType:dataType]);
