@@ -318,6 +318,7 @@ static HTTPActionManager *uniqueInstance;
     typedef void (^CallError)(NSError *error, NSData *data);
     CallError callError = ^void(NSError *error, NSData *data) {
         object.errorBlock([self errorWithError:error data:data]);
+        [object clear];
 #if DEBUG
         NSLog(@"\nsendAsynchronousRequest error -> %@", error);
 #endif
@@ -337,6 +338,7 @@ static HTTPActionManager *uniqueInstance;
                 if (_response.statusCode >= HTTPStatusCodeOK && _response.statusCode <= HTTPStatusCodeCachedOk) {
                     NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
                     object.successBlock([self resultWithData:data dataType:dataType]);
+                    [object clear];
 #if DEBUG
                     NSLog(@"\nsendAsynchronousRequest success -> %@, %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
 #endif

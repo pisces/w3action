@@ -54,6 +54,8 @@
 
 - (void)dealloc
 {
+    [self clear];
+    
     _action = nil;
     _body = nil;
     _headers = nil;
@@ -64,6 +66,12 @@
 // ================================================================================================
 //  Public
 // ================================================================================================
+
+- (void)clear
+{
+    _errorBlock = NULL;
+    _successBlock = NULL;
+}
 
 - (NSString *)paramWithUTF8StringEncoding
 {
