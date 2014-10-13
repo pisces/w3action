@@ -72,7 +72,7 @@ enum HTTPStatusCode {
 @property (nonatomic) BOOL async;
 @property (nonatomic) BOOL useNetworkActivityIndicator;
 @property (nonatomic) NSTimeInterval timeInterval;
-@property (nonatomic, readonly) NSMutableDictionary *headers;
+@property (nonatomic, readonly, strong) NSMutableDictionary *headers;
 
 + (HTTPActionManager *)sharedInstance;
 - (NSDictionary *)actionWith:(NSString *)actionId;
