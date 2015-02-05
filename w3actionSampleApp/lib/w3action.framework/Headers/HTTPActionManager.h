@@ -43,6 +43,17 @@
 #define HTTP_METHOD_GET @"GET"
 #define HTTP_METHOD_POST @"POST"
 
+enum HTTPStatusCode {
+    HTTPStatusCodeOK = 200,
+    HTTPStatusCodeCachedOk = 304,
+    HTTPStatusCodeBadRequest = 400,
+    HTTPStatusCodeUnauthorized = 401,
+    HTTPStatusCodeForbidden = 403,
+    HTTPStatusCodeNotFound = 404,
+    HTTPStatusCodeBadGateway = 502,
+    HTTPStatusCodeServiceUnavailable = 503
+};
+
 // ================================================================================================
 //  NSURLObject
 // ================================================================================================
@@ -61,13 +72,13 @@
 @property (nonatomic) BOOL async;
 @property (nonatomic) BOOL useNetworkActivityIndicator;
 @property (nonatomic) NSTimeInterval timeInterval;
-@property (nonatomic, retain) NSDictionary *header;
+@property (nonatomic, readonly, strong) NSMutableDictionary *headers;
 
 + (HTTPActionManager *)sharedInstance;
 - (NSDictionary *)actionWith:(NSString *)actionId;
 - (void)addResourceWithBundle:(NSBundle *)bundle plistName:(NSString *)plistName;
 - (BOOL)contains:(NSString *)actionId;
-- (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body header:(NSDictionary *)header success:(SuccessBlock)success error:(ErrorBlock)error;
+- (HTTPRequestObject *)doAction:(NSString *)actionId param:(NSObject *)param body:(id)body headers:(NSDictionary *)headers success:(SuccessBlock)success error:(ErrorBlock)error;
 - (HTTPRequestObject *)doActionWithRequestObject:(HTTPRequestObject *)object success:(SuccessBlock)success error:(ErrorBlock)error;
 - (void)removeResourceWithBundle:(NSBundle *)bundle plistName:(NSString *)plistName;
 - (NSURLObject *)URLObjectWithRequstObject:(HTTPRequestObject *)object;

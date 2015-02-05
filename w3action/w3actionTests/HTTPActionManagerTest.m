@@ -47,7 +47,7 @@
 {
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
-    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil header:nil success:^(NSDictionary *result){
+    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil headers:nil success:^(NSDictionary *result){
         [monitor signal];
         XCTAssertNotNil(result);
         XCTAssertTrue([result isKindOfClass:[NSDictionary class]]);
@@ -63,7 +63,7 @@
 {
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
-    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-xml" param:nil body:nil header:nil success:^(APDocument *result){
+    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-xml" param:nil body:nil headers:nil success:^(APDocument *result){
         [monitor signal];
         XCTAssertNotNil(result);
         XCTAssertTrue([result isKindOfClass:[APDocument class]]);
@@ -79,7 +79,7 @@
 {
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
-    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-text" param:nil body:nil header:nil success:^(NSString *result){
+    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-text" param:nil body:nil headers:nil success:^(NSString *result){
         [monitor signal];
         XCTAssertNotNil(result);
         XCTAssertTrue([result isKindOfClass:[NSString class]]);
@@ -119,7 +119,7 @@
 {
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
-    __block HTTPRequestObject *object = [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil header:nil success:^(NSDictionary *result){
+    __block HTTPRequestObject *object = [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil headers:nil success:^(NSDictionary *result){
         [monitor signal];
         XCTAssertNotNil([[HTTPActionManager sharedInstance] URLObjectWithRequstObject:object]);
     } error:^(NSError *error){
@@ -139,7 +139,7 @@
     
     MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"sample.png" data:data];
     
-    [[HTTPActionManager sharedInstance] doAction:@"example-contenttype-multipart" param:nil body:object header:nil success:^(NSDictionary *result){
+    [[HTTPActionManager sharedInstance] doAction:@"example-contenttype-multipart" param:nil body:object headers:nil success:^(NSDictionary *result){
         [monitor signal];
         XCTAssertNotNil(result);
         XCTAssertTrue([result isKindOfClass:[NSDictionary class]]);
@@ -157,7 +157,7 @@
     
     NSDictionary *param = @{@"resourceFolderName": @"resources"};
     
-    [[HTTPActionManager sharedInstance] doAction:@"example-path-param" param:param body:nil header:nil success:^(NSDictionary *result){
+    [[HTTPActionManager sharedInstance] doAction:@"example-path-param" param:param body:nil headers:nil success:^(NSDictionary *result){
         [monitor signal];
         NSLog(@"result -> %@", result);
         XCTAssertNotNil(result);

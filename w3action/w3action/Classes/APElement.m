@@ -106,7 +106,7 @@
  Returns the number of attributes on this element
 */
 - (int)attributeCount {
-	return [attributes count];
+	return (int) [attributes count];
 }
 
 /*
@@ -120,7 +120,7 @@
  Returns the number of child elements
 */
 - (int)childCount {
-	return [childElements count];
+	return (int) [childElements count];
 }
 
 /*
@@ -139,7 +139,7 @@
 - (NSMutableArray*)childElements:(NSString*)aName {
 	NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
 	
-	int numElements = [childElements count];
+	int numElements = (int) [childElements count];
 	for (int i=0; i<numElements; i++)
 	{
 		APElement *currElement = [childElements objectAtIndex:i];
@@ -166,7 +166,7 @@
  Returns nil if the element has no matching child.
 */
 - (APElement*)firstChildElementNamed:(NSString*)aName {
-	int numElements = [childElements count];
+	int numElements = (int) [childElements count];
 	for (int i=0; i<numElements; i++)
 	{
 		APElement *currElement = [childElements objectAtIndex:i];
@@ -219,7 +219,7 @@
 		[xmlResult appendFormat:@" %@=\"%@\"", key, [attributes objectForKey:key]];
 	}
 	
-	int numChildren = [childElements count];
+	int numChildren = (int) [childElements count];
 	if (numChildren == 0 && value == nil)
 	{
 		[xmlResult appendFormat:@" />\n"];
@@ -259,7 +259,7 @@
 	}
 	
 	// append closing bracket and value
-	int numChildren = [childElements count];
+	int numChildren = (int) [childElements count];
 	if (numChildren == 0 && value == nil)
 	{
 		[xmlResult appendFormat:@"/>"];

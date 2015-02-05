@@ -59,8 +59,8 @@ enum HTTPStatusCode {
 // ================================================================================================
 
 @interface NSURLObject : NSObject
-@property (nonatomic, retain) NSURLRequest *request;
-@property (nonatomic, retain) NSHTTPURLResponse *response;
+@property (nonatomic, strong) NSURLRequest *request;
+@property (nonatomic, strong) NSHTTPURLResponse *response;
 + (NSURLObject *)objectWithRequest:(NSURLRequest *)request response:(NSHTTPURLResponse *)response;
 @end
 
