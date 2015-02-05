@@ -8,7 +8,7 @@
     
 // execution
 [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" 
-	param:nil body:nil header:nil success:^(NSDictionary *result){
+	param:nil body:nil headers:nil success:^(NSDictionary *result){
 	NSLog(@"JSON result -> %@", result);
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
@@ -107,7 +107,7 @@
 #### Data Type JSON
 ```objective-c
 [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" 
-	param:nil body:nil header:nil success:^(NSDictionary *result){
+	param:nil body:nil headers:nil success:^(NSDictionary *result){
 	NSLog(@"JSON result -> %@", result);
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
@@ -117,7 +117,7 @@
 #### Data Type XML
 ```objective-c
 [[HTTPActionManager sharedInstance] doAction:@"example-datatype-xml" 
-	param:nil body:nil header:nil success:^(APDocument *result){
+	param:nil body:nil headers:nil success:^(APDocument *result){
 	NSLog(@"XML result -> %@", result);
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
@@ -127,7 +127,7 @@
 #### Data Type Text
 ```objective-c
 [[HTTPActionManager sharedInstance] doAction:@"example-datatype-text" 
-	param:nil body:nil header:nil success:^(NSString *result){
+	param:nil body:nil headers:nil success:^(NSString *result){
 	NSLog(@"Text result -> %@", result);
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
@@ -141,7 +141,7 @@ NSData *imageData = UIImagePNGRepresentation(image);
 MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"sample.png" data:imageData];
     
 [[HTTPActionManager sharedInstance] doAction:@"example-contenttype-multipart" 
-	param:nil body:object header:nil success:^(NSString *result){
+	param:nil body:object headers:nil success:^(NSString *result){
 	NSLog(@"JSON result -> %@", result);
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
@@ -153,7 +153,7 @@ MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"
 NSDictionary *param = @{@"resourceFolderName": @"resources"};
     
 [[HTTPActionManager sharedInstance] doAction:@"example-datatype-text" 
-	param:nil body:object header:nil success:^(NSString *result){
+	param:nil body:object headers:nil success:^(NSString *result){
 	NSLog(@"JSON result -> %@", result);
 } error:^(NSError *error){
 	NSLog(@"error -> %@", error);
