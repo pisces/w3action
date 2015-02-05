@@ -3,11 +3,12 @@
 //  w3action
 //
 //  Created by KH Kim on 2013. 12. 30..
+//  Modified by KH Kim on 15. 2. 5..
 //  Copyright (c) 2013 KH Kim. All rights reserved.
 //
 
 /*
- Copyright 2013 KH Kim
+ Copyright 2013~2015 KH Kim
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -183,7 +184,7 @@
         NSDictionary *actions = [actionPlistDictionary objectForKey:key];
         
         for (NSString *key in actions)
-        	[actionPlist removeObjectForKey:key];
+            [actionPlist removeObjectForKey:key];
         
         [actionPlistDictionary removeObjectForKey:key];
     }
@@ -225,7 +226,10 @@
 - (NSError *)errorWithError:(NSError *)error data:(NSData *)data
 {
     NSMutableDictionary *userInfo = error.userInfo ? [NSMutableDictionary dictionaryWithDictionary:error.userInfo] : [NSMutableDictionary dictionary];
-    [userInfo setObject:data forKey:@"data"];
+    
+    if (data)
+        [userInfo setObject:data forKey:@"data"];
+    
     return [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
 }
 
@@ -309,12 +313,14 @@
 
 - (void)sendAsynchronousRequest:(NSURLRequest *)request withObject:(HTTPRequestObject *)object
 {
+    NSNumber *key = @(object.hash);
+    
+    [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:nil] forKey:key];
+    
     [object startWithRequest:request completion:^(BOOL success, NSData *data, NSError *error) {
-        NSNumber *key = @(object.hash);
-        
         if (success) {
 #if DEBUG
-            NSLog(@"\nsendAsynchronousRequest success -> %@, %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
+            NSLog(@"%@:: sendAsynchronousRequest success -> %@, %@", NSStringFromClass([self class]), [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
 #endif
             NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
             object.successBlock([self resultWithData:data dataType:dataType]);
@@ -338,15 +344,19 @@
     NSError *error = nil;
     NSHTTPURLResponse *response = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-#if DEBUG
-    NSLog(@"\nsynchronousRequest result, error -> %@, %@, %@, %zd", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString], error, response.statusCode);
-#endif
-    NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
+    NSNumber *key = @(object.hash);
+    
     [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
     
-    if (error != nil) {
+    if (error) {
+#if DEBUG
+        NSLog(@"%@:: sendSynchronousRequest error -> %@, %@", NSStringFromClass([self class]), object.action, error);
+#endif
         object.errorBlock([self errorWithError:error data:data]);
     } else {
+#if DEBUG
+        NSLog(@"%@:: sendSynchronousRequest success -> %@, %@", NSStringFromClass([self class]), [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
+#endif
         NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
         object.successBlock([self resultWithData:data dataType:dataType]);
     }
@@ -386,7 +396,7 @@
     if ([method isEqualToString:HTTP_METHOD_GET] && object.param && object.param.count > 0)
         stringOfURL = [stringOfURL stringByAppendingFormat:@"?%@", [object paramWithUTF8StringEncoding]];
     
-     return [NSURL URLWithString:stringOfURL];
+    return [NSURL URLWithString:stringOfURL];
 }
 @end
 
