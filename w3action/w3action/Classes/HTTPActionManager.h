@@ -8,7 +8,7 @@
 //
 
 /*
- Copyright 2013 KH Kim
+ Copyright 2013~2015 KH Kim
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@
 #define HTTP_METHOD_GET @"GET"
 #define HTTP_METHOD_POST @"POST"
 
-enum HTTPStatusCode {
+enum {
     HTTPStatusCodeOK = 200,
     HTTPStatusCodeCachedOk = 304,
     HTTPStatusCodeBadRequest = 400,
@@ -54,6 +54,7 @@ enum HTTPStatusCode {
     HTTPStatusCodeBadGateway = 502,
     HTTPStatusCodeServiceUnavailable = 503
 };
+typedef NSInteger HTTPStatusCode;
 
 // ================================================================================================
 //  NSURLObject
