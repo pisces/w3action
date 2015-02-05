@@ -17,7 +17,7 @@
 			<key>timeout</key>
 			<string>10</string>
 			<key>async</key>
-			<false/>
+			<true/>
 		</dict>
 		<key>example-datatype-xml</key>
 		<dict>
@@ -32,7 +32,7 @@
 			<key>timeout</key>
 			<string>10</string>
 			<key>async</key>
-			<false/>
+			<true/>
 		</dict>
 		<key>example-datatype-text</key>
 		<dict>
@@ -47,7 +47,7 @@
 			<key>timeout</key>
 			<string>10</string>
 			<key>async</key>
-			<false/>
+			<true/>
 		</dict>
 		<key>example-contenttype-multipart</key>
 		<dict>
@@ -75,7 +75,7 @@
 			<key>timeout</key>
 			<string>10</string>
 			<key>async</key>
-			<false/>
+			<true/>
 		</dict>
 	</dict>
 </dict>

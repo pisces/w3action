@@ -24,7 +24,7 @@
 {
     [super viewDidAppear:animated];
     
-    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil header:nil success:^(NSDictionary *result){
+    [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil headers:nil success:^(NSDictionary *result){
         NSLog(@"JSON result -> %@", result);
         self.textView.text = [NSString stringWithFormat:@"example-datatype-json success\n\nresult ->\n%@", result];
     } error:^(NSError *error){

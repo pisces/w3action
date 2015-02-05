@@ -10,29 +10,29 @@
 	<string>w3actionSampleApp</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>8E1DB154-074E-4A2A-9170-B27D6230A523</key>
+		<key>79BA6BB14C6B517BF4EB332617F34DFD379BFF2A</key>
 		<string>https://github.com/pisces/w3action.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>w3actionSampleApp/w3actionSampleApp.xcodeproj/project.xcworkspace</string>
+	<string>w3actionSampleApp/w3actionSampleApp.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>8E1DB154-074E-4A2A-9170-B27D6230A523</key>
+		<key>79BA6BB14C6B517BF4EB332617F34DFD379BFF2A</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/pisces/w3action.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>8E1DB154-074E-4A2A-9170-B27D6230A523</string>
+	<string>79BA6BB14C6B517BF4EB332617F34DFD379BFF2A</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>8E1DB154-074E-4A2A-9170-B27D6230A523</string>
+			<string>79BA6BB14C6B517BF4EB332617F34DFD379BFF2A</string>
 			<key>IDESourceControlWCCName</key>
 			<string>w3action</string>
 		</dict>

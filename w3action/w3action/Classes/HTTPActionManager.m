@@ -24,7 +24,7 @@
 
 #import "HTTPActionManager.h"
 
-#define HTTPActionAsyncKey @"aync"
+#define HTTPActionAsyncKey @"async"
 #define HTTPActionContentTypeKey @"contentType"
 #define HTTPActionDataTypeKey @"dataType"
 #define HTTPActionMethodKey @"method"
@@ -33,7 +33,7 @@
 
 // ================================================================================================
 //
-//  HTTPActionObject
+//  Implementation: NSURLObject
 //
 // ================================================================================================
 
@@ -63,29 +63,10 @@
 }
 
 // ================================================================================================
-//  Class Variables
-// ================================================================================================
-
-static HTTPActionManager *uniqueInstance;
-
-// ================================================================================================
-//  Class Methods
-// ================================================================================================
-
-// Get the shared instance and create it if necessary.
-+ (HTTPActionManager *)sharedInstance {
-    @synchronized (self) {
-        if (!uniqueInstance) {
-            uniqueInstance = [[HTTPActionManager alloc] init];
-            uniqueInstance.timeInterval = 10.0;
-        }
-    }
-    return uniqueInstance;
-}
-
-// ================================================================================================
 //  Overridden: NSObject
 // ================================================================================================
+
+#pragma mark - Overridden: NSObject
 
 - (void)dealloc
 {
@@ -100,6 +81,7 @@ static HTTPActionManager *uniqueInstance;
 - (id)init
 {
     self = [super init];
+    
     if (self)
     {
         queue = dispatch_queue_create("org.apache.w3action.HTTPActionManager", NULL);
@@ -110,12 +92,27 @@ static HTTPActionManager *uniqueInstance;
         actionPlistDictionary = [[NSMutableDictionary alloc] init];
         urlObjectDic = [[NSMutableDictionary alloc] init];
     }
+    
     return self;
 }
 
 // ================================================================================================
 //  Public
 // ================================================================================================
+
+#pragma mark - Public class methods
+
++ (HTTPActionManager *)sharedInstance
+{
+    static HTTPActionManager *instance;
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^{
+        instance = [[[self class] alloc] init];
+    });
+    return instance;
+}
+
+#pragma mark - Public methods
 
 - (NSDictionary *)actionWith:(NSString *)actionId
 {
@@ -158,11 +155,6 @@ static HTTPActionManager *uniqueInstance;
         return nil;
     }
     
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
-    if (_useNetworkActivityIndicator)
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
     HTTPRequestObject *object = [HTTPRequestObject objectWithAction:[actionPlist objectForKey:actionId] param:param body:body headers:headers success:success error:error];
     
     [self doRequest:object];
@@ -173,12 +165,7 @@ static HTTPActionManager *uniqueInstance;
 - (HTTPRequestObject *)doActionWithRequestObject:(HTTPRequestObject *)object success:(SuccessBlock)success error:(ErrorBlock)error
 {
     if (!object)
-        return NO;
-    
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
-    if (_useNetworkActivityIndicator)
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        return nil;
     
     object.successBlock = success;
     object.errorBlock = error;
@@ -208,8 +195,10 @@ static HTTPActionManager *uniqueInstance;
 }
 
 // ================================================================================================
-//  Internal
+//  Private
 // ================================================================================================
+
+#pragma mark - Private methods
 
 - (void)doRequest:(HTTPRequestObject *)object
 {
@@ -218,10 +207,15 @@ static HTTPActionManager *uniqueInstance;
         id asyncOption = [object.action objectForKey:HTTPActionAsyncKey];
         BOOL async = asyncOption ? [asyncOption boolValue] : _async;
         
-        if (async)
-            [self sendAsynchronousRequest:request withObject:object];
-        else
-            [self sendSynchronousRequest:request withObject:object];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.useNetworkActivityIndicator)
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+            
+            if (async)
+                [self sendAsynchronousRequest:request withObject:object];
+            else
+                [self sendSynchronousRequest:request withObject:object];
+        });
     });
 #if DEBUG
     NSLog(@"Request End -----------------------------------------");
@@ -233,20 +227,6 @@ static HTTPActionManager *uniqueInstance;
     NSMutableDictionary *userInfo = error.userInfo ? [NSMutableDictionary dictionaryWithDictionary:error.userInfo] : [NSMutableDictionary dictionary];
     [userInfo setObject:data forKey:@"data"];
     return [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
-}
-
-- (id)resultWithData:(NSData *)data dataType:(NSString *)dataType
-{
-    if (!data)
-        return nil;
-    
-    if ([dataType isEqualToString:DataTypeJSON])
-        return [data dictionaryWithUTF8JSONString];
-    if ([dataType isEqualToString:DataTypeXML])
-        return [APDocument documentWithXMLString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-    if ([dataType isEqualToString:DataTypeText])
-        return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    return data;
 }
 
 - (NSURLRequest *)requestWithObject:(HTTPRequestObject *)object
@@ -313,44 +293,43 @@ static HTTPActionManager *uniqueInstance;
     return request;
 }
 
+- (id)resultWithData:(NSData *)data dataType:(NSString *)dataType
+{
+    if (!data)
+        return nil;
+    
+    if ([dataType isEqualToString:DataTypeJSON])
+        return [data dictionaryWithUTF8JSONString];
+    if ([dataType isEqualToString:DataTypeXML])
+        return [APDocument documentWithXMLString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+    if ([dataType isEqualToString:DataTypeText])
+        return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return data;
+}
+
 - (void)sendAsynchronousRequest:(NSURLRequest *)request withObject:(HTTPRequestObject *)object
 {
-    typedef void (^CallError)(NSError *error, NSData *data);
-    CallError callError = ^void(NSError *error, NSData *data) {
-        object.errorBlock([self errorWithError:error data:data]);
-        [object clear];
-#if DEBUG
-        NSLog(@"\nsendAsynchronousRequest error -> %@", error);
-#endif
-    };
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError){
-            NSHTTPURLResponse *_response = (NSHTTPURLResponse *) response;
-            NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
-            [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:_response] forKey:key];
+    [object startWithRequest:request completion:^(BOOL success, NSData *data, NSError *error) {
+        NSNumber *key = @(object.hash);
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        if (success) {
 #if DEBUG
-            NSLog(@"_response.statusCode -> %li", (long) _response.statusCode);
+            NSLog(@"\nsendAsynchronousRequest success -> %@, %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
 #endif
-            if (connectionError) {
-                callError(connectionError, nil);
-            } else {
-                if (_response.statusCode >= HTTPStatusCodeOK && _response.statusCode <= HTTPStatusCodeCachedOk) {
-                    NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
-                    object.successBlock([self resultWithData:data dataType:dataType]);
-                    [object clear];
+            NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
+            object.successBlock([self resultWithData:data dataType:dataType]);
+        } else {
 #if DEBUG
-                    NSLog(@"\nsendAsynchronousRequest success -> %@, %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
+            NSLog(@"%@:: sendAsynchronousRequest error -> %@, %@", NSStringFromClass([self class]), object.action, error);
 #endif
-                } else {
-                    callError([NSError errorWithDomain:@"Unknown http error." code:_response.statusCode userInfo:nil], data);
-                }
-            }
-            
-            [urlObjectDic removeObjectForKey:key];
-            
+            object.errorBlock([self errorWithError:error data:data]);
+        }
+        
+        if (self.useNetworkActivityIndicator)
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        });
+        
+        [urlObjectDic removeObjectForKey:key];
+        [object clear];
     }];
 }
 
@@ -360,23 +339,23 @@ static HTTPActionManager *uniqueInstance;
     NSHTTPURLResponse *response = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 #if DEBUG
-    NSLog(@"\nsynchronousRequest result, error -> %@, %@, %@, %d", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString], error, response.statusCode);
+    NSLog(@"\nsynchronousRequest result, error -> %@, %@, %@, %zd", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString], error, response.statusCode);
 #endif
     NSNumber *key = [NSNumber numberWithUnsignedLong:object.hash];
     [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (error != nil) {
-            object.errorBlock([self errorWithError:error data:data]);
-        } else {
-            NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
-            object.successBlock([self resultWithData:data dataType:dataType]);
-        }
-        
+    if (error != nil) {
+        object.errorBlock([self errorWithError:error data:data]);
+    } else {
+        NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
+        object.successBlock([self resultWithData:data dataType:dataType]);
+    }
+    
+    if (self.useNetworkActivityIndicator)
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        
-        [urlObjectDic removeObjectForKey:key];
-    });
+    
+    [urlObjectDic removeObjectForKey:key];
+    [object clear];
 }
 
 - (NSURL *)URLWithObject:(HTTPRequestObject *)object

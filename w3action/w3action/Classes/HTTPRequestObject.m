@@ -3,6 +3,7 @@
 //  w3action
 //
 //  Created by KH Kim on 2013. 12. 30..
+//  Modified by KH Kim on 15. 2. 5..
 //  Copyright (c) 2013 KH Kim. All rights reserved.
 //
 
@@ -31,10 +32,28 @@
 // ================================================================================================
 
 @implementation HTTPRequestObject
+{
+@private
+    CompletionBlock completionBlock;
+    NSMutableData *mutableData;
+}
 
 // ================================================================================================
-//  Class method
+//  Overridden: NSObject
 // ================================================================================================
+
+#pragma mark - Overridden: NSObject
+
+- (void)dealloc
+{
+    [self clear];
+}
+
+// ================================================================================================
+//  Public
+// ================================================================================================
+
+#pragma mark - Public class methods
 
 + (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSDictionary *)param body:(id)body headers:(NSDictionary *)headers success:(SuccessBlock)success error:(ErrorBlock)error
 {
@@ -48,35 +67,7 @@
     return instance;
 }
 
-// ================================================================================================
-//  Overridden: NSObject
-// ================================================================================================
-
-- (void)dealloc
-{
-    [self clear];
-    
-    _action = nil;
-    _body = nil;
-    _headers = nil;
-    _param = nil;
-    _paramString = nil;
-}
-
-// ================================================================================================
-//  Public
-// ================================================================================================
-
-- (void)clear
-{
-    _errorBlock = NULL;
-    _successBlock = NULL;
-}
-
-- (NSString *)paramWithUTF8StringEncoding
-{
-    return [_paramString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-}
+#pragma mark - Public getter/setter
 
 - (void)setParam:(NSDictionary *)param
 {
@@ -90,8 +81,97 @@
         return;
     
     _param = param;
-    _paramString = [_param urlString];
+    _paramString = _param.urlEncodedString;
 }
+
+#pragma mark - Public methods
+
+- (void)cancel
+{
+    if (_connection)
+    {
+        [_connection cancel];
+        _connection = nil;
+    }
+    
+    completionBlock = NULL;
+    mutableData = nil;
+}
+
+- (void)clear
+{
+    [self cancel];
+    
+    completionBlock = nil;
+    mutableData = nil;
+    _action = nil;
+    _body = nil;
+    _connection = nil;
+    _headers = nil;
+    _param = nil;
+    _paramString = nil;
+    _errorBlock = NULL;
+    _successBlock = NULL;
+}
+
+- (NSString *)paramWithUTF8StringEncoding
+{
+    return [self.paramString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (void)startWithRequest:(NSURLRequest *)request completion:(CompletionBlock)completion
+{
+    [self cancel];
+    
+    completionBlock = completion;
+    _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+    
+    [_connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    [_connection start];
+}
+
+// ================================================================================================
+//  Private
+// ================================================================================================
+
+#pragma mark - Private methods
+
+- (void)processWithError:(NSError *)error
+{
+    if (completionBlock)
+        completionBlock(NO, nil, error);
+}
+
+#pragma mark - NSURLConnectionDelegate
+
+- (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error
+{
+    [self processWithError:error];
+}
+
+- (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)response
+{
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    
+    if (httpResponse.statusCode >= 200 && httpResponse.statusCode <= 304)
+        mutableData = [NSMutableData data];
+    else
+        [self processWithError:nil];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection
+{
+    if (completionBlock)
+        completionBlock(YES, mutableData, nil);
+}
+
+#pragma mark - NSURLConnectionDataDelegate
+
+- (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)data
+{
+    [mutableData appendData:data];
+}
+
 @end
 
 // ================================================================================================
@@ -100,7 +180,7 @@
 //
 // ================================================================================================
 
-@implementation NSDictionary (com_pisces_com_KnitNet)
+@implementation NSDictionary (org_apache_w3action_NSDictionary)
 
 static NSString *toString(id object)
 {
@@ -141,6 +221,12 @@ static NSString *urlEncode(id object)
 //  Implementation: MultipartFormDataObject
 //
 // ================================================================================================
+
+// ================================================================================================
+//  Public
+// ================================================================================================
+
+#pragma mark - Public class methods
 
 @implementation MultipartFormDataObject
 + (MultipartFormDataObject *)objectWithFilename:(NSString *)filename data:(NSData *)data
