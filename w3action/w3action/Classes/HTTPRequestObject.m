@@ -156,7 +156,7 @@
     if (httpResponse.statusCode >= 200 && httpResponse.statusCode <= 304)
         mutableData = [NSMutableData data];
     else
-        [self processWithError:nil];
+        [self processWithError:[NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUnknown userInfo:@{@"statusCode": @(httpResponse.statusCode)}]];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection

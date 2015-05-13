@@ -25,12 +25,22 @@
 
 #import "HTTPActionManager.h"
 
-#define HTTPActionAsyncKey @"async"
-#define HTTPActionContentTypeKey @"contentType"
-#define HTTPActionDataTypeKey @"dataType"
-#define HTTPActionMethodKey @"method"
-#define HTTPActionTimeoutKey @"timeout"
-#define HTTPActionURLKey @"url"
+NSString *const ContentTypeApplicationJSON = @"application/json";
+NSString *const ContentTypeApplicationXML = @"application/xml";
+NSString *const ContentTypeApplicationXWWWFormURLEncoded = @"application/x-www-form-urlencoded";
+NSString *const ContentTypeMultipartFormData = @"multipart/form-data";
+NSString *const DataTypeJSON = @"json";
+NSString *const DataTypeXML = @"xml";
+NSString *const DataTypeText = @"text";
+NSString *const HTTP_METHOD_GET = @"GET";
+NSString *const HTTP_METHOD_POST = @"POST";
+
+NSString *const HTTPActionAsyncKey = @"async";
+NSString *const HTTPActionContentTypeKey = @"contentType";
+NSString *const HTTPActionDataTypeKey = @"dataType";
+NSString *const HTTPActionMethodKey = @"method";
+NSString *const HTTPActionTimeoutKey = @"timeout";
+NSString *const HTTPActionURLKey = @"url";
 
 // ================================================================================================
 //

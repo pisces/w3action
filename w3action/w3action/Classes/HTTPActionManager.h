@@ -34,15 +34,15 @@
 //  Define
 // ================================================================================================
 
-#define ContentTypeApplicationJSON @"application/json"
-#define ContentTypeApplicationXML @"application/xml"
-#define ContentTypeApplicationXWWWFormURLEncoded @"application/x-www-form-urlencoded"
-#define ContentTypeMultipartFormData @"multipart/form-data"
-#define DataTypeJSON @"json"
-#define DataTypeXML @"xml"
-#define DataTypeText @"text"
-#define HTTP_METHOD_GET @"GET"
-#define HTTP_METHOD_POST @"POST"
+extern NSString *const ContentTypeApplicationJSON;
+extern NSString *const ContentTypeApplicationXML;
+extern NSString *const ContentTypeApplicationXWWWFormURLEncoded;
+extern NSString *const ContentTypeMultipartFormData;
+extern NSString *const DataTypeJSON;
+extern NSString *const DataTypeXML;
+extern NSString *const DataTypeText;
+extern NSString *const HTTP_METHOD_GET;
+extern NSString *const HTTP_METHOD_POST;
 
 enum {
     HTTPStatusCodeOK = 200,
