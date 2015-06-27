@@ -182,24 +182,23 @@
 
 @implementation NSDictionary (org_apache_w3action_NSDictionary)
 
-static NSString *toString(id object)
+static NSString *urlEncode(NSString *string)
 {
-    return [NSString stringWithFormat: @"%@", object];
-}
-
-static NSString *urlEncode(id object)
-{
-    NSString *string = toString(object);
-    return [string stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+    CFStringRef str = CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef) string, NULL, (CFStringRef) @"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+    NSString *result = [NSString stringWithString:(__bridge NSString *) str];
+    CFRelease(str);
+    return result;
 }
 
 - (NSString *)urlEncodedString
 {
     NSMutableArray *parts = [NSMutableArray array];
     for (id key in self) {
-        NSString *value = (NSString *) [self objectForKey:key];
-        NSString *part = [NSString stringWithFormat:@"%@=%@", urlEncode(key), urlEncode(value)];
-        [parts addObject:part];
+        NSString *encodedKey = [key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        id value = [self objectForKey:key];
+        value = [value isKindOfClass:[NSString class]] ? urlEncode(value) : value;
+        
+        [parts addObject:[NSString stringWithFormat:@"%@=%@", encodedKey, value]];
     }
     return [parts componentsJoinedByString:@"&"];
 }
@@ -208,9 +207,9 @@ static NSString *urlEncode(id object)
 {
     NSMutableArray *parts = [NSMutableArray array];
     for (id key in self) {
-        NSString *value = (NSString *) [self objectForKey:key];
-        NSString *part = [NSString stringWithFormat:@"%@=%@", key, value];
-        [parts addObject:part];
+        id value = [self objectForKey:key];
+        
+        [parts addObject:[NSString stringWithFormat:@"%@=%@", key, value]];
     }
     return [parts componentsJoinedByString:@"&"];
 }
@@ -229,10 +228,11 @@ static NSString *urlEncode(id object)
 #pragma mark - Public class methods
 
 @implementation MultipartFormDataObject
-+ (MultipartFormDataObject *)objectWithFilename:(NSString *)filename data:(NSData *)data
++ (MultipartFormDataObject *)objectWithFilename:(NSString *)filename filetype:(NSString *)filetype data:(NSData *)data
 {
     MultipartFormDataObject *object = [[MultipartFormDataObject alloc] init];
     object.filename = filename;
+    object.filetype = filetype;
     object.data = data;
     return object;
 }

@@ -51,7 +51,8 @@ typedef void (^CompletionBlock)(BOOL success, NSData *data, NSError *error);
 @end
 
 @interface MultipartFormDataObject : NSObject
-@property (nonatomic, retain) NSString *filename;
-@property (nonatomic, retain) NSData *data;
-+ (MultipartFormDataObject *)objectWithFilename:(NSString *)filename data:(NSData *)data;
+@property (nonatomic, strong) NSString *filename;
+@property (nonatomic, strong) NSString *filetype;
+@property (nonatomic, strong) NSData *data;
++ (MultipartFormDataObject *)objectWithFilename:(NSString *)filename filetype:(NSString *)filetype data:(NSData *)data;
 @end

@@ -32,6 +32,7 @@ NSString *const ContentTypeMultipartFormData = @"multipart/form-data";
 NSString *const DataTypeJSON = @"json";
 NSString *const DataTypeXML = @"xml";
 NSString *const DataTypeText = @"text";
+NSString *const HTTP_METHOD_DELETE = @"DELETE";
 NSString *const HTTP_METHOD_GET = @"GET";
 NSString *const HTTP_METHOD_POST = @"POST";
 
@@ -243,6 +244,29 @@ NSString *const HTTPActionURLKey = @"url";
     return [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
 }
 
+- (NSString *)recursiveReplaceURLString:(NSString *)urlString object:(HTTPRequestObject *)object {
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:object.param];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{.*?\\}" options:0 error:nil];
+    NSTextCheckingResult *matche = [regex firstMatchInString:urlString options:0 range:(NSRange) {0, urlString.length}];
+    
+    if (matche) {
+        NSRegularExpression *propertyNameRegex = [NSRegularExpression regularExpressionWithPattern:@"\\{|\\}" options:0 error:nil];
+        NSString *matchedString = [urlString substringWithRange:matche.range];
+        NSString *propertyName = [propertyNameRegex stringByReplacingMatchesInString:matchedString options:0 range:(NSRange) {0, matchedString.length} withTemplate:@""];
+        id value = [object.param objectForKey:propertyName];
+        NSString *replaceString = [NSString stringWithFormat:@"%@", value];
+        urlString = [regex stringByReplacingMatchesInString:urlString options:0 range:matche.range withTemplate:replaceString];
+        
+        [param removeObjectForKey:propertyName];
+        
+        object.param = param;
+        
+        urlString = [self recursiveReplaceURLString:urlString object:object];
+    }
+    
+    return urlString;
+}
+
 - (NSURLRequest *)requestWithObject:(HTTPRequestObject *)object
 {
     NSString *method = [object.action objectForKey:HTTPActionMethodKey];
@@ -277,7 +301,7 @@ NSString *const HTTPActionURLKey = @"url";
         NSMutableData *body = [NSMutableData data];
         [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"Filedata\"; filename=\"%@\"\r\n", mobject.filename] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", mobject.filetype] dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:mobject.data];
         [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         [request setHTTPBody:body];
@@ -292,7 +316,7 @@ NSString *const HTTPActionURLKey = @"url";
         else if ([contentType isEqualToString:ContentTypeApplicationXML])
             bodyString = [((NSDictionary *) object.body) urlString];
         else
-            bodyString = object.paramString != nil && [method isEqualToString:HTTP_METHOD_POST] ? [object paramString] : nil;
+            bodyString = object.paramString != nil && ([method isEqualToString:HTTP_METHOD_POST] || [method isEqualToString:HTTP_METHOD_DELETE]) ? object.paramString : nil;
 #if DEBUG
         NSLog(@"bodyString -> %@", bodyString);
 #endif
@@ -381,32 +405,12 @@ NSString *const HTTPActionURLKey = @"url";
 - (NSURL *)URLWithObject:(HTTPRequestObject *)object
 {
     NSString *method = [object.action objectForKey:HTTPActionMethodKey];
-    NSString *stringOfURL = [object.action objectForKey:HTTPActionURLKey];
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{.*?\\}" options:0 error:nil];
-    NSArray *matches = [regex matchesInString:stringOfURL options:0 range:(NSRange) {0, stringOfURL.length}];
-    if (matches.count > 0)
-    {
-        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:object.param];
-        
-        for (NSTextCheckingResult *result in matches)
-        {
-            NSRegularExpression *propertyNameRegex = [NSRegularExpression regularExpressionWithPattern:@"\\{|\\}" options:0 error:nil];
-            NSString *matchedString = [stringOfURL substringWithRange:result.range];
-            NSString *propertyName = [propertyNameRegex stringByReplacingMatchesInString:matchedString options:0 range:(NSRange) {0, matchedString.length} withTemplate:@""];
-            id value = [object.param objectForKey:propertyName];
-            NSString *replaceString = [NSString stringWithFormat:@"%@", value];
-            stringOfURL = [regex stringByReplacingMatchesInString:stringOfURL options:0 range:result.range withTemplate:replaceString];
-            
-            [param removeObjectForKey:propertyName];
-        }
-        
-        object.param = param;
-    }
+    NSString *urlString = [self recursiveReplaceURLString:[object.action objectForKey:HTTPActionURLKey] object:object];
     
     if ([method isEqualToString:HTTP_METHOD_GET] && object.param && object.param.count > 0)
-        stringOfURL = [stringOfURL stringByAppendingFormat:@"?%@", [object paramWithUTF8StringEncoding]];
+        urlString = [urlString stringByAppendingFormat:@"?%@", object.paramString];
     
-    return [NSURL URLWithString:stringOfURL];
+    return [NSURL URLWithString:urlString];
 }
 @end
 
