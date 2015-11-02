@@ -293,13 +293,19 @@ NSString *const HTTPActionURLKey = @"url";
 #endif
     if ([contentType isEqualToString:ContentTypeMultipartFormData])
     {
+        MultipartFormDataObject *mobject = (MultipartFormDataObject *) object.body;
+        NSMutableData *body = [NSMutableData data];
         NSString *boundary = @"0xKhTmLbOuNdArY";
         contentType = [contentType stringByAppendingFormat:@"; boundary=%@", boundary];
         [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
         
-        MultipartFormDataObject *mobject = (MultipartFormDataObject *) object.body;
-        NSMutableData *body = [NSMutableData data];
-        [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [object.param enumerateKeysAndObjectsUsingBlock:^(NSString *parameterKey, NSString *parameterValue, BOOL *stop) {
+            [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+            [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", parameterKey] dataUsingEncoding:NSUTF8StringEncoding]];
+            [body appendData:[[NSString stringWithFormat:@"%@\r\n", parameterValue] dataUsingEncoding:NSUTF8StringEncoding]];
+        }];
+        
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"Filedata\"; filename=\"%@\"\r\n", mobject.filename] dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", mobject.filetype] dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:mobject.data];
@@ -352,24 +358,41 @@ NSString *const HTTPActionURLKey = @"url";
     [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:nil] forKey:key];
     
     [object startWithRequest:request completion:^(BOOL success, NSData *data, NSError *error) {
-        if (success) {
+        dispatch_async(queue, ^{
+            @autoreleasepool {
+                if (success) {
 #if DEBUG
-            NSLog(@"%@:: sendAsynchronousRequest success -> %@, %@", NSStringFromClass([self class]), [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
+                    NSLog(@"%@:: sendAsynchronousRequest success -> %@, %@", NSStringFromClass([self class]), [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
 #endif
-            NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
-            object.successBlock([self resultWithData:data dataType:dataType]);
-        } else {
+                    NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
+                    id result = [self resultWithData:data dataType:dataType];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (object.successBlock)
+                            object.successBlock(result);
+                        
+                        [urlObjectDic removeObjectForKey:key];
+                        [object clear];
+                    });
+                } else {
 #if DEBUG
-            NSLog(@"%@:: sendAsynchronousRequest error -> %@, %@", NSStringFromClass([self class]), object.action, error);
+                    NSLog(@"%@:: sendAsynchronousRequest error -> %@, %@", NSStringFromClass([self class]), object.action, error);
 #endif
-            object.errorBlock([self errorWithError:error data:data]);
-        }
-        
-        if (self.useNetworkActivityIndicator)
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        
-        [urlObjectDic removeObjectForKey:key];
-        [object clear];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (object.errorBlock)
+                            object.errorBlock([self errorWithError:error data:data]);
+                        
+                        [urlObjectDic removeObjectForKey:key];
+                        [object clear];
+                    });
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (self.useNetworkActivityIndicator)
+                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                });
+            }
+        });
     }];
 }
 

@@ -238,8 +238,12 @@ char *NewBase64Encode(
 @implementation NSData (com_pisces_lib_w3action)
 - (NSDictionary *)dictionaryWithUTF8JSONString
 {
-    NSString *jsonStr = [[NSString alloc] initWithData:self encoding:NSUTF8StringEncoding];
-    return [jsonStr objectFromJSONString];
+    @try {
+        return [NSJSONSerialization JSONObjectWithData:self options:NSJSONReadingMutableContainers error:nil];
+    }
+    @catch (NSException *exception) {
+        return nil;
+    }
 }
 
 //
@@ -274,15 +278,11 @@ return result;
 //
 - (NSString *)base64EncodedString
 {
-	size_t outputLength;
+	size_t outputLength = 0;
 	char *outputBuffer =
     NewBase64Encode([self bytes], [self length], true, &outputLength);
 	
-	NSString *result =
-    [[NSString alloc]
-      initWithBytes:outputBuffer
-      length:outputLength
-      encoding:NSASCIIStringEncoding];
+	NSString *result = [[NSString alloc] initWithBytes:outputBuffer length:outputLength encoding:NSASCIIStringEncoding];
 	free(outputBuffer);
 	return result;
 }
