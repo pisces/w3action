@@ -4,11 +4,12 @@
 //
 //  Created by KH Kim on 13. 12. 30..
 //  Modified by KH Kim on 15. 2. 5..
-//  Copyright (c) 2013 KH Kim. All rights reserved.
+//  Modified by KH Kim on 16. 2. 16..
+//  Copyright (c) 2013~2016 KH Kim. All rights reserved.
 //
 
 /*
- Copyright 2013~2015 KH Kim
+ Copyright 2013~2016 KH Kim
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -27,21 +28,22 @@
 
 typedef void (^SuccessBlock)(id result);
 typedef void (^ErrorBlock)(NSError *error);
-typedef void (^CompletionBlock)(BOOL success, NSData *data, NSError *error);
+typedef void (^CompletionBlock)(NSHTTPURLResponse *response, NSData *data, NSError *error);
 
-@interface HTTPRequestObject : NSObject <NSURLConnectionDataDelegate, NSURLConnectionDelegate>
+@interface HTTPRequestObject : NSObject <NSURLSessionDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
 @property(nonatomic, strong) NSDictionary *action;
 @property(nonatomic, strong) id body;
 @property(nonatomic, strong) NSDictionary *headers;
 @property(nonatomic, strong) NSDictionary *param;
 @property(nonatomic, readonly, strong) NSString *paramString;
-@property(nonatomic, readonly) NSURLConnection *connection;
+@property(nonatomic, readonly) NSURLSessionDataTask *sessionDataTask;
 @property(nonatomic, copy) SuccessBlock successBlock;
 @property(nonatomic, copy) ErrorBlock errorBlock;
 + (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body headers:(NSDictionary *)headers success:(SuccessBlock)success error:(ErrorBlock)error;
 - (void)cancel;
 - (void)clear;
-- (void)startWithRequest:(NSURLRequest *)request completion:(CompletionBlock)completion;
+- (void)sendAsynchronousRequest:(NSURLRequest *)request completion:(CompletionBlock)completion;
+- (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSHTTPURLResponse * __nullable * __nullable)response error:(NSError * __nullable * __nullable)error;
 - (NSString *)paramWithUTF8StringEncoding;
 @end
 

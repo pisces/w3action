@@ -42,7 +42,6 @@
 		235E49B318891EB100F14B4E /* APElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49AA18891EB100F14B4E /* APElement.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		235E49B418891EB100F14B4E /* APElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 235E49AA18891EB100F14B4E /* APElement.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		236C29E8187259C80042279E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29E7187259C80042279E /* Foundation.framework */; };
-		236C29F6187259C80042279E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29F5187259C80042279E /* XCTest.framework */; };
 		236C29F7187259C80042279E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29E7187259C80042279E /* Foundation.framework */; };
 		236C29FC187259C80042279E /* libw3action-Device.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 236C29E4187259C80042279E /* libw3action-Device.a */; };
 		236C2A02187259C80042279E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 236C2A00187259C80042279E /* InfoPlist.strings */; };
@@ -133,7 +132,6 @@
 		236C29E7187259C80042279E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		236C29EB187259C80042279E /* w3action-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "w3action-Prefix.pch"; sourceTree = "<group>"; };
 		236C29F4187259C80042279E /* w3actionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = w3actionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		236C29F5187259C80042279E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		236C29FF187259C80042279E /* w3actionTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "w3actionTests-Info.plist"; sourceTree = "<group>"; };
 		236C2A01187259C80042279E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		236C2A03187259C80042279E /* w3actionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = w3actionTests.m; sourceTree = "<group>"; };
@@ -167,7 +165,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				236C29F6187259C80042279E /* XCTest.framework in Frameworks */,
 				236C29F7187259C80042279E /* Foundation.framework in Frameworks */,
 				236C29FC187259C80042279E /* libw3action-Device.a in Frameworks */,
 				23578C6518728292008101CB /* UIKit.framework in Frameworks */,
@@ -248,7 +245,6 @@
 				23E74D5918E44BF200704188 /* CFNetwork.framework */,
 				23578C601872827F008101CB /* UIKit.framework */,
 				236C29E7187259C80042279E /* Foundation.framework */,
-				236C29F5187259C80042279E /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -387,7 +383,7 @@
 		236C29DC187259C80042279E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "KH Kim";
 			};
 			buildConfigurationList = 236C29DF187259C80042279E /* Build configuration list for PBXProject "w3action" */;
@@ -435,7 +431,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SIMULATOR_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}-Simulator.a\" &&\nDEVICE_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}-Device.a\" &&\nUNIVERSAL_LIBRARY_DIR=\"/Users/Shared/Frameworks\" &&\nUNIVERSAL_LIBRARY_PATH=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}\" &&\nFRAMEWORK=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}.framework\" &&\nPROJECT_PATH=\"../${PRODUCT_NAME}\" &&\n\n# Create framework directory structure.\nrm -rf \"${FRAMEWORK}\" &&\nmkdir -p \"${UNIVERSAL_LIBRARY_DIR}\" &&\nmkdir -p \"${FRAMEWORK}/Headers\" &&\n\n# Generate universal binary for the device and simulator.\nlipo \"${SIMULATOR_LIBRARY_PATH}\" \"${DEVICE_LIBRARY_PATH}\" -create -output \"${UNIVERSAL_LIBRARY_PATH}\" &&\n\n# Move files to appropriate locations in framework paths.\nmv \"${UNIVERSAL_LIBRARY_PATH}\" \"${FRAMEWORK}\" &&\n\n# Copy header files from project\ncd \"${PROJECT_PATH}/${PRODUCT_NAME}/Classes/\" &&\nfind . -name '*.h' | cpio -pdm \"${FRAMEWORK}/Headers\"";
+			shellScript = "SIMULATOR_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}-Simulator.a\" &&\nDEVICE_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}-Device.a\" &&\nUNIVERSAL_LIBRARY_DIR=\"build\" &&\nUNIVERSAL_LIBRARY_PATH=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}\" &&\nFRAMEWORK=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}.framework\" &&\nPROJECT_PATH=\"../${PRODUCT_NAME}\" &&\n\n# Create framework directory structure.\nrm -rf \"${FRAMEWORK}\" &&\nmkdir -p \"${UNIVERSAL_LIBRARY_DIR}\" &&\nmkdir -p \"${FRAMEWORK}/Headers\" &&\n\n# Generate universal binary for the device and simulator.\nlipo \"${SIMULATOR_LIBRARY_PATH}\" \"${DEVICE_LIBRARY_PATH}\" -create -output \"${UNIVERSAL_LIBRARY_PATH}\" &&\n\n# Move files to appropriate locations in framework paths.\nmv \"${UNIVERSAL_LIBRARY_PATH}\" \"${FRAMEWORK}\" &&\n\n# Copy header files from project\ncd \"${PROJECT_PATH}/${PRODUCT_NAME}/Classes/\" &&\nfind . -name '*.h' | cpio -pdm \"${FRAMEWORK}/Headers\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -541,6 +537,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -555,7 +552,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -586,7 +583,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -645,6 +642,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "w3actionTests/w3actionTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.apache.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -661,6 +659,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "w3action/w3action-Prefix.pch";
 				INFOPLIST_FILE = "w3actionTests/w3actionTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.apache.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
 			};

@@ -4,11 +4,12 @@
 //
 //  Created by KH Kim on 2013. 12. 30..
 //  Modified by KH Kim on 15. 2. 5..
-//  Copyright (c) 2013 KH Kim. All rights reserved.
+//  Modified by KH Kim on 16. 2. 16..
+//  Copyright (c) 2013~2016 KH Kim. All rights reserved.
 //
 
 /*
- Copyright 2013~2015 KH Kim
+ Copyright 2013~2016 KH Kim
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -35,6 +36,7 @@
 {
 @private
     CompletionBlock completionBlock;
+    NSHTTPURLResponse *httpURLResponse;
     NSMutableData *mutableData;
 }
 
@@ -88,13 +90,14 @@
 
 - (void)cancel
 {
-    if (_connection)
+    if (self.sessionDataTask)
     {
-        [_connection cancel];
-        _connection = nil;
+        [self.sessionDataTask cancel];
+        _sessionDataTask = nil;
     }
     
     completionBlock = NULL;
+    httpURLResponse = nil;
     mutableData = nil;
 }
 
@@ -102,11 +105,8 @@
 {
     [self cancel];
     
-    completionBlock = nil;
-    mutableData = nil;
     _action = nil;
     _body = nil;
-    _connection = nil;
     _headers = nil;
     _param = nil;
     _paramString = nil;
@@ -119,15 +119,42 @@
     return [self.paramString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
-- (void)startWithRequest:(NSURLRequest *)request completion:(CompletionBlock)completion
+- (void)sendAsynchronousRequest:(NSURLRequest *)request completion:(CompletionBlock)completion
 {
     [self cancel];
     
     completionBlock = completion;
-    _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
     
-    [_connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-    [_connection start];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
+    _sessionDataTask = [session dataTaskWithRequest:request];
+    
+    [self.sessionDataTask resume];
+}
+
+- (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSHTTPURLResponse * __nullable * __nullable)response error:(NSError * __nullable * __nullable)error {
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block NSData *result = nil;
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable res, NSError * _Nullable err) {
+        NSHTTPURLResponse *_response = (NSHTTPURLResponse *) res;
+        *response = _response;
+        
+        if (err) {
+            *error = err;
+        } else {
+            if (_response.statusCode >= 200 && _response.statusCode <= 304) {
+                result = data;
+            } else {
+                *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUnknown userInfo:@{@"statusCode": @(httpURLResponse.statusCode)}];
+            }
+        }
+        
+        dispatch_semaphore_signal(semaphore);
+    }] resume];
+    
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    
+    return result;
 }
 
 // ================================================================================================
@@ -136,40 +163,66 @@
 
 #pragma mark - Private methods
 
-- (void)processWithError:(NSError *)error
+- (void)errorStateWithResponse:(NSHTTPURLResponse *)response error:(NSError *)error
 {
     if (completionBlock)
-        completionBlock(NO, nil, error);
+        completionBlock(response, nil, error);
 }
 
-#pragma mark - NSURLConnectionDelegate
+#pragma mark - NSURLSession delegate
 
-- (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error
-{
-    [self processWithError:error];
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error {
+    [self errorStateWithResponse:nil error:error];
 }
 
-- (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)response
-{
-    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
     
-    if (httpResponse.statusCode >= 200 && httpResponse.statusCode <= 304)
+    completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+}
+
+#pragma mark - NSURLSessionData delegate
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
+    httpURLResponse = (NSHTTPURLResponse *) response;
+    
+    if (httpURLResponse.statusCode >= 200 && httpURLResponse.statusCode <= 304) {
         mutableData = [NSMutableData data];
-    else
-        [self processWithError:[NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUnknown userInfo:@{@"statusCode": @(httpResponse.statusCode)}]];
+        completionHandler(NSURLSessionResponseAllow);
+    } else {
+        completionHandler(NSURLSessionResponseCancel);
+        [self errorStateWithResponse:httpURLResponse error:[NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUnknown userInfo:@{@"statusCode": @(httpURLResponse.statusCode)}]];
+    }
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection
-{
-    if (completionBlock)
-        completionBlock(YES, mutableData, nil);
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
 }
 
-#pragma mark - NSURLConnectionDataDelegate
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask {
+}
 
-- (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)data
-{
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+    didReceiveData:(NSData *)data {
     [mutableData appendData:data];
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+ willCacheResponse:(NSCachedURLResponse *)proposedResponse
+ completionHandler:(void (^)(NSCachedURLResponse * __nullable cachedResponse))completionHandler {
+    completionHandler(proposedResponse);
+}
+
+#pragma mark - NSURLSessionTask delegate
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+    if (error) {
+        [self errorStateWithResponse:httpURLResponse error:error];
+    } else if (completionBlock) {
+        completionBlock(httpURLResponse, mutableData, nil);
+    }
 }
 
 @end

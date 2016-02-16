@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>w3action-Device.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>18</integer>
+		</dict>
+		<key>w3action-Framework.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>21</integer>
+		</dict>
+		<key>w3action-Simulator.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>19</integer>
+		</dict>
+		<key>w3actionTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<true/>
+			<key>orderHint</key>
+			<integer>20</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>2332A56D18CEB1A9008BD00B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>236C29E3187259C80042279E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>236C29F3187259C80042279E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>23B96ECA187270B70040D283</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>23B96EDB187271190040D283</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

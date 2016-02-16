@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "w3actionTests/HTTPActionManagerTest.m"
-            timestampString = "444797664.798297"
+            timestampString = "477312587.362127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
             landmarkName = "-testDoActionWithDataTypeXML"
             landmarkType = "5">
          </BreakpointContent>
