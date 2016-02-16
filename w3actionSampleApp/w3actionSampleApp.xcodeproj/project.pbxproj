@@ -17,7 +17,6 @@
 		23EE90FE1898E7690098175D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23EE90FD1898E7690098175D /* UIKit.framework */; };
 		23EE91041898E7690098175D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 23EE91021898E7690098175D /* InfoPlist.strings */; };
 		23EE91061898E7690098175D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23EE91051898E7690098175D /* main.m */; };
-		23EE91191898E7690098175D /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23EE91181898E7690098175D /* XCTest.framework */; };
 		23EE911A1898E7690098175D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23EE90F91898E7690098175D /* Foundation.framework */; };
 		23EE911B1898E7690098175D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23EE90FD1898E7690098175D /* UIKit.framework */; };
 		23EE91231898E7690098175D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 23EE91211898E7690098175D /* InfoPlist.strings */; };
@@ -57,7 +56,6 @@
 		23EE91051898E7690098175D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		23EE91071898E7690098175D /* w3actionSampleApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "w3actionSampleApp-Prefix.pch"; sourceTree = "<group>"; };
 		23EE91171898E7690098175D /* w3actionSampleAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = w3actionSampleAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		23EE91181898E7690098175D /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		23EE91201898E7690098175D /* w3actionSampleAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "w3actionSampleAppTests-Info.plist"; sourceTree = "<group>"; };
 		23EE91221898E7690098175D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		23EE91241898E7690098175D /* w3actionSampleAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = w3actionSampleAppTests.m; sourceTree = "<group>"; };
@@ -85,7 +83,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23EE91191898E7690098175D /* XCTest.framework in Frameworks */,
 				23EE911B1898E7690098175D /* UIKit.framework in Frameworks */,
 				23EE91311898E7EF0098175D /* w3action.framework in Frameworks */,
 				23EE911A1898E7690098175D /* Foundation.framework in Frameworks */,
@@ -142,7 +139,6 @@
 				23EE90F91898E7690098175D /* Foundation.framework */,
 				23EE90FB1898E7690098175D /* CoreGraphics.framework */,
 				23EE90FD1898E7690098175D /* UIKit.framework */,
-				23EE91181898E7690098175D /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
