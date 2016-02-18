@@ -41,8 +41,12 @@ extern NSString *const ContentTypeMultipartFormData;
 extern NSString *const DataTypeJSON;
 extern NSString *const DataTypeXML;
 extern NSString *const DataTypeText;
-extern NSString *const HTTP_METHOD_GET;
-extern NSString *const HTTP_METHOD_POST;
+extern NSString *const HTTPRequestMethodDelete;
+extern NSString *const HTTPRequestMethodGet;
+extern NSString *const HTTPRequestMethodPost;
+extern NSString *const HTTPResponseFieldConnection;
+extern NSString *const HTTPResponseFieldContentLength;
+extern NSString *const HTTPResponseFieldContentType;
 
 enum {
     HTTPStatusCodeOK = 200,
@@ -74,7 +78,7 @@ typedef NSInteger HTTPStatusCode;
 @property (nonatomic) BOOL async;
 @property (nonatomic) BOOL useNetworkActivityIndicator;
 @property (nonatomic) NSTimeInterval timeInterval;
-@property (nonatomic, readonly, strong) NSMutableDictionary *headers;
+@property (nonatomic, readonly) NSMutableDictionary *headers;
 
 + (HTTPActionManager *)sharedInstance;
 - (NSDictionary *)actionWith:(NSString *)actionId;
