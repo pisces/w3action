@@ -48,6 +48,7 @@
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
     [[HTTPActionManager sharedInstance] doAction:@"example-datatype-json" param:nil body:nil headers:nil success:^(NSDictionary *result){
+        NSLog(@"result -> %@", result);
         [monitor signal];
         XCTAssertNotNil(result);
         XCTAssertTrue([result isKindOfClass:[NSDictionary class]]);
@@ -96,7 +97,7 @@
     TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
     
     NSDictionary *action = [NSMutableDictionary dictionaryWithDictionary:[[HTTPActionManager sharedInstance] actionWith:@"example-datatype-json"]];
-    [action setValue:@"method" forKey:HTTP_METHOD_POST];
+    [action setValue:@"method" forKey:HTTPRequestMethodPost];
     [action setValue:@"contentType" forKey:ContentTypeApplicationJSON];
     
     HTTPRequestObject *object = [[HTTPRequestObject alloc] init];
@@ -137,7 +138,7 @@
     UIImage *image = [[UIImage alloc] init];
     NSData *data = UIImagePNGRepresentation(image);
     
-    MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"sample.png" data:data];
+    MultipartFormDataObject *object = [MultipartFormDataObject objectWithFilename:@"sample.png" filetype:@"image/jpg" data:data];
     
     [[HTTPActionManager sharedInstance] doAction:@"example-contenttype-multipart" param:nil body:object headers:nil success:^(NSDictionary *result){
         [monitor signal];
@@ -169,4 +170,23 @@
     
     [monitor wait];
 }
+
+
+- (void)testLoadImage
+{
+    TRVSMonitor *monitor = [[TRVSMonitor alloc] initWithExpectedSignalCount:1];
+    
+    [[HTTPActionManager sharedInstance] doAction:@"example-load-image" param:nil body:nil headers:nil success:^(NSData *result){
+        [monitor signal];
+        UIImage *image = [UIImage imageWithData:result];
+        XCTAssertNotNil(result);
+        XCTAssertNotNil(image);
+    } error:^(NSError *error){
+        [monitor signal];
+        XCTAssertFalse(YES);
+    }];
+    
+    [monitor wait];
+}
+
 @end

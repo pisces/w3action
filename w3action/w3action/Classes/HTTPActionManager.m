@@ -32,9 +32,12 @@ NSString *const ContentTypeMultipartFormData = @"multipart/form-data";
 NSString *const DataTypeJSON = @"json";
 NSString *const DataTypeXML = @"xml";
 NSString *const DataTypeText = @"text";
-NSString *const HTTP_METHOD_DELETE = @"DELETE";
-NSString *const HTTP_METHOD_GET = @"GET";
-NSString *const HTTP_METHOD_POST = @"POST";
+NSString *const HTTPRequestMethodDelete = @"DELETE";
+NSString *const HTTPRequestMethodGet = @"GET";
+NSString *const HTTPRequestMethodPost = @"POST";
+NSString *const HTTPResponseFieldConnection = @"Connection";
+NSString *const HTTPResponseFieldContentLength = @"Content-Length";
+NSString *const HTTPResponseFieldContentType = @"Content-Type";
 
 NSString *const HTTPActionAsyncKey = @"async";
 NSString *const HTTPActionContentTypeKey = @"contentType";
@@ -42,6 +45,7 @@ NSString *const HTTPActionDataTypeKey = @"dataType";
 NSString *const HTTPActionMethodKey = @"method";
 NSString *const HTTPActionTimeoutKey = @"timeout";
 NSString *const HTTPActionURLKey = @"url";
+NSString *const MultipartFormDataBoundary = @"0xKhTmLbOuNdArY";
 
 // ================================================================================================
 //
@@ -68,7 +72,7 @@ NSString *const HTTPActionURLKey = @"url";
 @implementation HTTPActionManager
 {
 @private
-    dispatch_queue_t queue;
+    dispatch_queue_t networkQueue;
     NSMutableDictionary *actionPlist;
     NSMutableDictionary *actionPlistDictionary;
     NSMutableDictionary *urlObjectDic;
@@ -82,12 +86,11 @@ NSString *const HTTPActionURLKey = @"url";
 
 - (void)dealloc
 {
-    dispatch_release(queue);
-    
-    _headers = nil;
+    networkQueue = NULL;
     actionPlist = nil;
     actionPlistDictionary = nil;
     urlObjectDic = nil;
+    _headers = nil;
 }
 
 - (id)init
@@ -96,13 +99,13 @@ NSString *const HTTPActionURLKey = @"url";
     
     if (self)
     {
-        queue = dispatch_queue_create("org.apache.w3action.HTTPActionManager", NULL);
-        _useNetworkActivityIndicator = YES;
-        _timeInterval = 10;
-        _headers = [NSMutableDictionary dictionary];
+        networkQueue = dispatch_queue_create("org.apache.w3action.HTTPActionManager", NULL);
         actionPlist = [[NSMutableDictionary alloc] init];
         actionPlistDictionary = [[NSMutableDictionary alloc] init];
         urlObjectDic = [[NSMutableDictionary alloc] init];
+        _useNetworkActivityIndicator = YES;
+        _timeInterval = 10;
+        _headers = [NSMutableDictionary dictionary];
     }
     
     return self;
@@ -167,7 +170,8 @@ NSString *const HTTPActionURLKey = @"url";
         return nil;
     }
     
-    HTTPRequestObject *object = [HTTPRequestObject objectWithAction:[actionPlist objectForKey:actionId] param:param body:body headers:headers success:success error:error];
+    NSDictionary *action = ((NSDictionary *) [actionPlist objectForKey:actionId]).copy;
+    HTTPRequestObject *object = [HTTPRequestObject objectWithAction:action param:param body:body headers:headers success:success error:error];
     
     [self doRequest:object];
     
@@ -214,7 +218,7 @@ NSString *const HTTPActionURLKey = @"url";
 
 - (void)doRequest:(HTTPRequestObject *)object
 {
-    dispatch_async(queue, ^(void){
+    dispatch_async(networkQueue, ^(void){
         NSURLRequest *request = [self requestWithObject:object];
         id asyncOption = [object.action objectForKey:HTTPActionAsyncKey];
         BOOL async = asyncOption ? [asyncOption boolValue] : _async;
@@ -244,6 +248,40 @@ NSString *const HTTPActionURLKey = @"url";
     return [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
 }
 
+- (NSData *)multipartFormDataWithObject:(HTTPRequestObject *)object
+{
+    MultipartFormDataObject *mobject = (MultipartFormDataObject *) object.body;
+    NSMutableData *body = [NSMutableData data];
+    [object.param enumerateKeysAndObjectsUsingBlock:^(NSString *parameterKey, NSString *parameterValue, BOOL *stop) {
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", MultipartFormDataBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", parameterKey] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"%@\r\n", parameterValue] dataUsingEncoding:NSUTF8StringEncoding]];
+    }];
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", MultipartFormDataBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"Filedata\"; filename=\"%@\"\r\n", mobject.filename] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", mobject.filetype] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:mobject.data];
+    [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", MultipartFormDataBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    return body;
+}
+
+- (NSData *)postDataWithObject:(HTTPRequestObject *)object
+{
+    NSString *method = [object.action objectForKey:HTTPActionMethodKey];
+    NSString *contentType = [object.action objectForKey:HTTPActionContentTypeKey];
+    NSString *string = nil;
+    
+    if ([contentType isEqualToString:ContentTypeApplicationJSON]) {
+        string = [((NSDictionary *) object.body) JSONString];
+    } else if ([contentType isEqualToString:ContentTypeApplicationXML]) {
+        string = [((NSDictionary *) object.body) urlString];
+    } else {
+        string = object.paramString != nil && ([method isEqualToString:HTTPRequestMethodPost] || [method isEqualToString:HTTPRequestMethodDelete]) ? object.paramString : nil;
+    }
+    
+    return [string dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+}
+
 - (NSString *)recursiveReplaceURLString:(NSString *)urlString object:(HTTPRequestObject *)object {
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:object.param];
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{.*?\\}" options:0 error:nil];
@@ -260,7 +298,6 @@ NSString *const HTTPActionURLKey = @"url";
         [param removeObjectForKey:propertyName];
         
         object.param = param;
-        
         urlString = [self recursiveReplaceURLString:urlString object:object];
     }
     
@@ -271,77 +308,49 @@ NSString *const HTTPActionURLKey = @"url";
 {
     NSString *method = [object.action objectForKey:HTTPActionMethodKey];
     NSString *contentType = [object.action objectForKey:HTTPActionContentTypeKey];
-    NSTimeInterval timeInterval = [object.action objectForKey:HTTPActionTimeoutKey] ? [[object.action objectForKey:HTTPActionTimeoutKey] doubleValue] : _timeInterval;
+    NSTimeInterval timeInterval = [object.action objectForKey:HTTPActionTimeoutKey] ? [[object.action objectForKey:HTTPActionTimeoutKey] doubleValue] : self.timeInterval;
     NSURL *url = [self URLWithObject:object];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeInterval];
     
     [request setHTTPMethod:method];
     
-    if (_headers)
-    {
-        for (NSString *key in _headers)
-            [request setValue:[_headers objectForKey:key] forHTTPHeaderField:key];
-    }
+    for (NSString *key in self.headers)
+        [request setValue:[self.headers objectForKey:key] forHTTPHeaderField:key];
     
-    if (object.headers)
-    {
-        for (NSString *key in object.headers)
-            [request setValue:[object.headers objectForKey:key] forHTTPHeaderField:key];
-    }
+    for (NSString *key in object.headers)
+        [request setValue:[object.headers objectForKey:key] forHTTPHeaderField:key];
+    
 #if DEBUG
     NSLog(@"\nRequest Start -----------------------------------------\norgUrl -> %@,\nurl -> %@,\ncontentType -> %@,\n method -> %@,\n header -> %@,\n param -> %@", [object.action objectForKey:HTTPActionURLKey], url, contentType, method, request.allHTTPHeaderFields, object.param);
 #endif
     if ([contentType isEqualToString:ContentTypeMultipartFormData])
     {
-        MultipartFormDataObject *mobject = (MultipartFormDataObject *) object.body;
-        NSMutableData *body = [NSMutableData data];
-        NSString *boundary = @"0xKhTmLbOuNdArY";
-        contentType = [contentType stringByAppendingFormat:@"; boundary=%@", boundary];
-        [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
-        
-        [object.param enumerateKeysAndObjectsUsingBlock:^(NSString *parameterKey, NSString *parameterValue, BOOL *stop) {
-            [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-            [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", parameterKey] dataUsingEncoding:NSUTF8StringEncoding]];
-            [body appendData:[[NSString stringWithFormat:@"%@\r\n", parameterValue] dataUsingEncoding:NSUTF8StringEncoding]];
-        }];
-        
-        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"Filedata\"; filename=\"%@\"\r\n", mobject.filename] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", mobject.filetype] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:mobject.data];
-        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        NSData *body = [self multipartFormDataWithObject:object];
+        [request setValue:[contentType stringByAppendingFormat:@"; boundary=%@", MultipartFormDataBoundary] forHTTPHeaderField:@"Content-Type"];
         [request setHTTPBody:body];
     }
     else
     {
+        NSData *body = [self postDataWithObject:object];
+        NSString *bodyLength = [NSString stringWithFormat:@"%zd", body.length];
         [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
-        
-        NSString *bodyString = nil;
-        if ([contentType isEqualToString:ContentTypeApplicationJSON])
-            bodyString = [((NSDictionary *) object.body) JSONString];
-        else if ([contentType isEqualToString:ContentTypeApplicationXML])
-            bodyString = [((NSDictionary *) object.body) urlString];
-        else
-            bodyString = object.paramString != nil && ([method isEqualToString:HTTP_METHOD_POST] || [method isEqualToString:HTTP_METHOD_DELETE]) ? object.paramString : nil;
-#if DEBUG
-        NSLog(@"bodyString -> %@", bodyString);
-#endif
-        if (bodyString)
-        {
-            NSData *body = [bodyString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-            NSString *bodyLength = [NSString stringWithFormat:@"%lu", (unsigned long) [body length]];
-            [request setValue:bodyLength forHTTPHeaderField:@"Content-Length"];
-            [request setHTTPBody:body];
-        }
+        [request setValue:bodyLength forHTTPHeaderField:@"Content-Length"];
+        [request setHTTPBody:body];
     }
     return request;
 }
 
-- (id)resultWithData:(NSData *)data dataType:(NSString *)dataType
+- (id)resultWithResponse:(NSHTTPURLResponse *)response data:(NSData *)data dataType:(NSString *)dataType
 {
     if (!data)
         return nil;
     
+    NSString *contentType = response.allHeaderFields[HTTPResponseFieldContentType];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^image/(.*)?$" options:0 error:nil];
+    NSTextCheckingResult *matche = [regex firstMatchInString:contentType options:0 range:(NSRange) {0, contentType.length}];
+    
+    if (matche)
+        return data;
     if ([dataType isEqualToString:DataTypeJSON])
         return [data dictionaryWithUTF8JSONString];
     if ([dataType isEqualToString:DataTypeXML])
@@ -357,15 +366,21 @@ NSString *const HTTPActionURLKey = @"url";
     
     [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:nil] forKey:key];
     
-    [object startWithRequest:request completion:^(BOOL success, NSData *data, NSError *error) {
-        dispatch_async(queue, ^{
-            @autoreleasepool {
-                if (success) {
-#if DEBUG
-                    NSLog(@"%@:: sendAsynchronousRequest success -> %@, %@", NSStringFromClass([self class]), [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
-#endif
+    [object sendAsynchronousRequest:request completion:^(NSHTTPURLResponse *response, NSData *data, NSError *error) {
+        if (error) {
+            if (object.errorBlock)
+                object.errorBlock([self errorWithError:error data:data]);
+            
+            [urlObjectDic removeObjectForKey:key];
+            [object clear];
+            
+            if (self.useNetworkActivityIndicator)
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        } else {
+            dispatch_async(networkQueue, ^{
+                @autoreleasepool {
                     NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
-                    id result = [self resultWithData:data dataType:dataType];
+                    id result = [self resultWithResponse:response data:data dataType:dataType];
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (object.successBlock)
@@ -373,56 +388,42 @@ NSString *const HTTPActionURLKey = @"url";
                         
                         [urlObjectDic removeObjectForKey:key];
                         [object clear];
-                    });
-                } else {
-#if DEBUG
-                    NSLog(@"%@:: sendAsynchronousRequest error -> %@, %@", NSStringFromClass([self class]), object.action, error);
-#endif
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (object.errorBlock)
-                            object.errorBlock([self errorWithError:error data:data]);
                         
-                        [urlObjectDic removeObjectForKey:key];
-                        [object clear];
+                        if (self.useNetworkActivityIndicator)
+                            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     });
                 }
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (self.useNetworkActivityIndicator)
-                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                });
-            }
-        });
+            });
+        }
     }];
 }
 
 - (void)sendSynchronousRequest:(NSURLRequest *)request withObject:(HTTPRequestObject *)object
 {
-    NSError *error = nil;
-    NSHTTPURLResponse *response = nil;
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSNumber *key = @(object.hash);
-    
-    [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
-    
-    if (error) {
-#if DEBUG
-        NSLog(@"%@:: sendSynchronousRequest error -> %@, %@", NSStringFromClass([self class]), object.action, error);
-#endif
-        object.errorBlock([self errorWithError:error data:data]);
-    } else {
-#if DEBUG
-        NSLog(@"%@:: sendSynchronousRequest success -> %@, %@", NSStringFromClass([self class]), [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], [data dictionaryWithUTF8JSONString]);
-#endif
+    dispatch_async(networkQueue, ^{
+        NSNumber *key = @(object.hash);
+        NSError *error = nil;
+        NSHTTPURLResponse *response = nil;
+        NSData *data = [object sendSynchronousRequest:request returningResponse:&response error:&error];
         NSString *dataType = [object.action objectForKey:HTTPActionDataTypeKey];
-        object.successBlock([self resultWithData:data dataType:dataType]);
-    }
-    
-    if (self.useNetworkActivityIndicator)
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
-    [urlObjectDic removeObjectForKey:key];
-    [object clear];
+        id result = !error && data ? [self resultWithResponse:response data:data dataType:dataType] : nil;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [urlObjectDic setObject:[NSURLObject objectWithRequest:request response:response] forKey:key];
+            
+            if (error) {
+                object.errorBlock([self errorWithError:error data:data]);
+            } else {
+                object.successBlock(result);
+            }
+            
+            [urlObjectDic removeObjectForKey:key];
+            [object clear];
+            
+            if (self.useNetworkActivityIndicator)
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        });
+    });
 }
 
 - (NSURL *)URLWithObject:(HTTPRequestObject *)object
@@ -430,7 +431,7 @@ NSString *const HTTPActionURLKey = @"url";
     NSString *method = [object.action objectForKey:HTTPActionMethodKey];
     NSString *urlString = [self recursiveReplaceURLString:[object.action objectForKey:HTTPActionURLKey] object:object];
     
-    if ([method isEqualToString:HTTP_METHOD_GET] && object.param && object.param.count > 0)
+    if ([method isEqualToString:HTTPRequestMethodGet] && object.param && object.param.count > 0)
         urlString = [urlString stringByAppendingFormat:@"?%@", object.paramString];
     
     return [NSURL URLWithString:urlString];
