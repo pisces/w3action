@@ -26,35 +26,35 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^SuccessBlock)(id result);
-typedef void (^ErrorBlock)(NSError *error);
-typedef void (^CompletionBlock)(NSHTTPURLResponse *response, NSData *data, NSError *error);
+typedef void (^SuccessBlock)(id _Nullable result);
+typedef void (^ErrorBlock)(NSError * _Nullable error);
+typedef void (^CompletionBlock)(NSHTTPURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable error);
 
 @interface HTTPRequestObject : NSObject <NSURLSessionDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
-@property(nonatomic, strong) NSDictionary *action;
-@property(nonatomic, strong) id body;
-@property(nonatomic, strong) NSDictionary *headers;
-@property(nonatomic, strong) NSDictionary *param;
-@property(nonatomic, readonly, strong) NSString *paramString;
-@property(nonatomic, readonly) NSURLSessionDataTask *sessionDataTask;
-@property(nonatomic, copy) SuccessBlock successBlock;
-@property(nonatomic, copy) ErrorBlock errorBlock;
-+ (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSObject *)param body:(id)body headers:(NSDictionary *)headers success:(SuccessBlock)success error:(ErrorBlock)error;
+@property(nonatomic, strong) NSDictionary * _Nonnull action;
+@property(nonatomic, strong) id _Nullable body;
+@property(nonatomic, strong) NSDictionary * _Nullable headers;
+@property(nonatomic, strong) NSDictionary * _Nullable param;
+@property(nonatomic, readonly) NSString * _Nullable paramString;
+@property(nonatomic, readonly) NSURLSessionDataTask * _Nonnull sessionDataTask;
+@property(nonatomic, copy) SuccessBlock _Nullable successBlock;
+@property(nonatomic, copy) ErrorBlock _Nullable errorBlock;
++ (HTTPRequestObject * _Nullable)objectWithAction:(NSDictionary * _Nonnull)action param:(NSObject * _Nullable)param body:(id _Nullable)body headers:(NSDictionary * _Nullable)headers success:(SuccessBlock _Nullable)success error:(ErrorBlock _Nullable)error;
 - (void)cancel;
 - (void)clear;
-- (void)sendAsynchronousRequest:(NSURLRequest *)request completion:(CompletionBlock)completion;
-- (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSHTTPURLResponse * __nullable * __nullable)response error:(NSError * __nullable * __nullable)error;
-- (NSString *)paramWithUTF8StringEncoding;
+- (void)sendAsynchronousRequest:(NSURLRequest * _Nonnull)request completion:(CompletionBlock _Nullable)completion;
+- (NSData * _Nullable)sendSynchronousRequest:(NSURLRequest * _Nonnull)request returningResponse:(NSHTTPURLResponse * _Nullable * _Nullable)response error:(NSError * _Nullable * _Nullable)error;
+- (NSString * _Nullable)paramWithUTF8StringEncoding;
 @end
 
 @interface NSDictionary (org_apache_w3action_NSDictionary)
-- (NSString *)urlEncodedString;
-- (NSString *)urlString;
+- (NSString * _Nullable)urlEncodedString;
+- (NSString * _Nullable)urlString;
 @end
 
 @interface MultipartFormDataObject : NSObject
-@property (nonatomic, strong) NSString *filename;
-@property (nonatomic, strong) NSString *filetype;
-@property (nonatomic, strong) NSData *data;
-+ (MultipartFormDataObject *)objectWithFilename:(NSString *)filename filetype:(NSString *)filetype data:(NSData *)data;
+@property (nonatomic, strong) NSString *  _Nullable filename;
+@property (nonatomic, strong) NSString *  _Nullable filetype;
+@property (nonatomic, strong) NSData * _Nullable data;
++ (MultipartFormDataObject * _Nonnull)objectWithFilename:(NSString * _Nonnull)filename filetype:(NSString *  _Nonnull)filetype data:(NSData * _Nonnull)data;
 @end

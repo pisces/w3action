@@ -16,6 +16,8 @@
 			<string>json</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<true/>
 		</dict>
 		<key>example-datatype-xml</key>
 		<dict>
@@ -29,6 +31,8 @@
 			<string>xml</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<true/>
 		</dict>
 		<key>example-datatype-text</key>
 		<dict>
@@ -42,21 +46,23 @@
 			<string>text</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<true/>
 		</dict>
 		<key>example-contenttype-multipart</key>
 		<dict>
 			<key>url</key>
-			<string>https://raw.github.com/pisces/w3action/master/w3action/resources/example-multipart.json</string>
+			<string>http://192.168.10.100/test/upload_test.php</string>
 			<key>method</key>
-			<string>GET</string>
-            <!-- comment for testcase success
+			<string>POST</string>
 			<key>contentType</key>
 			<string>multipart/form-data</string>
-             -->
 			<key>dataType</key>
 			<string>json</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<true/>
 		</dict>
 		<key>example-path-param</key>
 		<dict>
@@ -70,6 +76,21 @@
 			<string>json</string>
 			<key>timeout</key>
 			<string>10</string>
+			<key>async</key>
+			<true/>
+		</dict>
+		<key>example-load-image</key>
+		<dict>
+			<key>url</key>
+			<string>https://d7far00nxgmur.cloudfront.net/images/p480x320/2016/02/10/17d63b1625c816c22647a73e1482372b_1455116647_56bb51680010e.jpg</string>
+			<key>method</key>
+			<string>GET</string>
+			<key>contentType</key>
+			<string>application/x-www-form-urlencoded</string>
+			<key>timeout</key>
+			<string>10</string>
+			<key>async</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

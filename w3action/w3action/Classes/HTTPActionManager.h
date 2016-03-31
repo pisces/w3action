@@ -65,8 +65,8 @@ typedef NSInteger HTTPStatusCode;
 // ================================================================================================
 
 @interface NSURLObject : NSObject
-@property (nonatomic, strong) NSURLRequest *request;
-@property (nonatomic, strong) NSHTTPURLResponse *response;
+@property (nonatomic, copy) NSURLRequest *request;
+@property (nonatomic, copy) NSHTTPURLResponse *response;
 + (NSURLObject *)objectWithRequest:(NSURLRequest *)request response:(NSHTTPURLResponse *)response;
 @end
 

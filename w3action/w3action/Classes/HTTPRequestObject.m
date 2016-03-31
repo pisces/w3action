@@ -38,6 +38,7 @@
     CompletionBlock completionBlock;
     NSHTTPURLResponse *httpURLResponse;
     NSMutableData *mutableData;
+    NSURLSession *session;
 }
 
 // ================================================================================================
@@ -59,7 +60,7 @@
 
 + (HTTPRequestObject *)objectWithAction:(NSDictionary *)action param:(NSDictionary *)param body:(id)body headers:(NSDictionary *)headers success:(SuccessBlock)success error:(ErrorBlock)error
 {
-    HTTPRequestObject *instance = [[HTTPRequestObject alloc] init];
+    HTTPRequestObject *instance = [HTTPRequestObject new];
     instance.action = action;
     instance.body = body;
     instance.param = param;
@@ -90,15 +91,14 @@
 
 - (void)cancel
 {
-    if (self.sessionDataTask)
-    {
-        [self.sessionDataTask cancel];
-        _sessionDataTask = nil;
-    }
+    [_sessionDataTask cancel];
+    [session finishTasksAndInvalidate];
     
     completionBlock = NULL;
     httpURLResponse = nil;
     mutableData = nil;
+    session = nil;
+    _sessionDataTask = nil;
 }
 
 - (void)clear
@@ -125,10 +125,10 @@
     
     completionBlock = completion;
     
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
+    session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
     _sessionDataTask = [session dataTaskWithRequest:request];
     
-    [self.sessionDataTask resume];
+    [_sessionDataTask resume];
 }
 
 - (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSHTTPURLResponse * __nullable * __nullable)response error:(NSError * __nullable * __nullable)error {

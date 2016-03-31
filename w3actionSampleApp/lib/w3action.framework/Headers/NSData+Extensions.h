@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <zlib.h>
-#import "JSONKit.h"
+//#import "JSONKit.h"
 
 void *NewBase64Decode(
                       const char *inputBuffer,

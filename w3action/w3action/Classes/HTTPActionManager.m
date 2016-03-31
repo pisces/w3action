@@ -170,7 +170,8 @@ NSString *const MultipartFormDataBoundary = @"0xKhTmLbOuNdArY";
         return nil;
     }
     
-    HTTPRequestObject *object = [HTTPRequestObject objectWithAction:[actionPlist objectForKey:actionId] param:param body:body headers:headers success:success error:error];
+    NSDictionary *action = ((NSDictionary *) [actionPlist objectForKey:actionId]).copy;
+    HTTPRequestObject *object = [HTTPRequestObject objectWithAction:action param:param body:body headers:headers success:success error:error];
     
     [self doRequest:object];
     
@@ -372,6 +373,9 @@ NSString *const MultipartFormDataBoundary = @"0xKhTmLbOuNdArY";
             
             [urlObjectDic removeObjectForKey:key];
             [object clear];
+            
+            if (self.useNetworkActivityIndicator)
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         } else {
             dispatch_async(networkQueue, ^{
                 @autoreleasepool {
@@ -384,13 +388,13 @@ NSString *const MultipartFormDataBoundary = @"0xKhTmLbOuNdArY";
                         
                         [urlObjectDic removeObjectForKey:key];
                         [object clear];
+                        
+                        if (self.useNetworkActivityIndicator)
+                            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     });
                 }
             });
         }
-        
-        if (self.useNetworkActivityIndicator)
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     }];
 }
 

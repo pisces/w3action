@@ -3,11 +3,12 @@
 //  w3action
 //
 //  Created by KH Kim on 2013. 12. 30..
+//  Modified by KH Kim on 15. 2. 5..
 //  Copyright (c) 2013 KH Kim. All rights reserved.
 //
 
 /*
- Copyright 2013 KH Kim
+ Copyright 2013~2015 KH Kim
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -25,25 +26,29 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "APXML.h"
-#import "JSONKit.h"
 #import "HTTPRequestObject.h"
 #import "NSData+Extensions.h"
+#import "NSDictionary+w3action.h"
 
 // ================================================================================================
 //  Define
 // ================================================================================================
 
-#define ContentTypeApplicationJSON @"application/json"
-#define ContentTypeApplicationXML @"application/xml"
-#define ContentTypeApplicationXWWWFormURLEncoded @"application/x-www-form-urlencoded"
-#define ContentTypeMultipartFormData @"multipart/form-data"
-#define DataTypeJSON @"json"
-#define DataTypeXML @"xml"
-#define DataTypeText @"text"
-#define HTTP_METHOD_GET @"GET"
-#define HTTP_METHOD_POST @"POST"
+extern NSString *const ContentTypeApplicationJSON;
+extern NSString *const ContentTypeApplicationXML;
+extern NSString *const ContentTypeApplicationXWWWFormURLEncoded;
+extern NSString *const ContentTypeMultipartFormData;
+extern NSString *const DataTypeJSON;
+extern NSString *const DataTypeXML;
+extern NSString *const DataTypeText;
+extern NSString *const HTTPRequestMethodDelete;
+extern NSString *const HTTPRequestMethodGet;
+extern NSString *const HTTPRequestMethodPost;
+extern NSString *const HTTPResponseFieldConnection;
+extern NSString *const HTTPResponseFieldContentLength;
+extern NSString *const HTTPResponseFieldContentType;
 
-enum HTTPStatusCode {
+enum {
     HTTPStatusCodeOK = 200,
     HTTPStatusCodeCachedOk = 304,
     HTTPStatusCodeBadRequest = 400,
@@ -53,6 +58,7 @@ enum HTTPStatusCode {
     HTTPStatusCodeBadGateway = 502,
     HTTPStatusCodeServiceUnavailable = 503
 };
+typedef NSInteger HTTPStatusCode;
 
 // ================================================================================================
 //  NSURLObject
