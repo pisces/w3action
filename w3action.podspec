@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "w3action"
-  s.version          = "1.0.0"
+  s.version          = "1.3.0"
   s.summary          = "w3action."
 
 # This description is used to generate tags and improve search results.
@@ -29,16 +29,12 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '7.0'
   s.requires_arc = true
-  s.source_files = 'w3action/Classes/**/*'
+  s.source_files = 'w3action/Classes/*.{m,h}'
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+  # s.public_header_files = 'Pod/Classes/*.{m,h}'
   s.frameworks = 'CFNetwork'
   s.dependency 'PSFoundation'
   s.dependency 'apxml'
-  
-  s.resource_bundles = {
-   'w3action' => ['w3action/Assets/*']
-  }
 
   s.pod_target_xcconfig = {
     'OTHER_LDFLAGS' => '$(inherited) -ObjC'
