@@ -35,8 +35,5 @@ Pod::Spec.new do |s|
   s.frameworks = 'CFNetwork'
   s.dependency 'PSFoundation'
   s.dependency 'apxml'
-
-  s.pod_target_xcconfig = {
-    'OTHER_LDFLAGS' => '$(inherited) -ObjC'
-  }
+  
 end

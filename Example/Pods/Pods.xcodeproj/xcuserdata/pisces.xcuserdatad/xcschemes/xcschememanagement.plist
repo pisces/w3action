@@ -29,11 +29,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>w3action-w3action.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>w3action.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -68,11 +63,6 @@
 			<true/>
 		</dict>
 		<key>9350DB4B280177E9B63394C2EB9A06AD</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>B41CCC546E9E499E63FD5D0649E8E06F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

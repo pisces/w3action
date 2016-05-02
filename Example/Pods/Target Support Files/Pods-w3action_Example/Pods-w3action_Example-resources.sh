@@ -81,11 +81,9 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "$CONFIGURATION_BUILD_DIR/PSFoundation/PSFoundation.bundle"
-  install_resource "$CONFIGURATION_BUILD_DIR/w3action/w3action.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "$CONFIGURATION_BUILD_DIR/PSFoundation/PSFoundation.bundle"
-  install_resource "$CONFIGURATION_BUILD_DIR/w3action/w3action.bundle"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

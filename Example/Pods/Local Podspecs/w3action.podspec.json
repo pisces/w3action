@@ -1,6 +1,6 @@
 {
   "name": "w3action",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "summary": "w3action.",
   "description": "w3action is library helps you can develop the application using http connection easily and fastly.",
   "homepage": "https://github.com/pisces/w3action",
@@ -10,13 +10,13 @@
   },
   "source": {
     "git": "https://github.com/pisces/w3action.git",
-    "tag": "1.0.0"
+    "tag": "1.3.0"
   },
   "platforms": {
     "ios": "7.0"
   },
   "requires_arc": true,
-  "source_files": "w3action/Classes/**/*",
+  "source_files": "w3action/Classes/*.{m,h}",
   "frameworks": "CFNetwork",
   "dependencies": {
     "PSFoundation": [
@@ -25,13 +25,5 @@
     "apxml": [
 
     ]
-  },
-  "resource_bundles": {
-    "w3action": [
-      "w3action/Assets/*"
-    ]
-  },
-  "pod_target_xcconfig": {
-    "OTHER_LDFLAGS": "$(inherited) -ObjC"
   }
 }
