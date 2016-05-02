@@ -1,0 +1,22 @@
+PODS:
+  - apxml (1.0)
+  - PSFoundation (1.0.1)
+  - w3action (1.0.0):
+    - apxml
+    - PSFoundation
+
+DEPENDENCIES:
+  - w3action (from `../`)
+
+EXTERNAL SOURCES:
+  w3action:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  apxml: 0930b839c8be6734f5091f8c8889b00f7d59559c
+  PSFoundation: b4e25f6d7bca5169af24c34163d8341d27a22134
+  w3action: 022e42906ea581c6aa3cbb089e57657172545fcf
+
+PODFILE CHECKSUM: ede691377b0e5b0923246a848b97438e4494b545
+
+COCOAPODS: 1.0.0.beta.8

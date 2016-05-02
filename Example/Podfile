@@ -1,0 +1,9 @@
+target 'w3action_Example' do
+  pod 'w3action', :path => '../'
+end
+
+target 'w3action_Tests' do
+  pod 'w3action', :path => '../'
+
+  
+end
