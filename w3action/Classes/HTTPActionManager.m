@@ -368,14 +368,16 @@ NSString *const MultipartFormDataBoundary = @"0xKhTmLbOuNdArY";
     
     [object sendAsynchronousRequest:request completion:^(NSHTTPURLResponse *response, NSData *data, NSError *error) {
         if (error) {
-            if (object.errorBlock)
-                object.errorBlock([self errorWithError:error data:data]);
-            
-            [urlObjectDic removeObjectForKey:key];
-            [object clear];
-            
-            if (self.useNetworkActivityIndicator)
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (object.errorBlock)
+                    object.errorBlock([self errorWithError:error data:data]);
+                
+                [urlObjectDic removeObjectForKey:key];
+                [object clear];
+                
+                if (self.useNetworkActivityIndicator)
+                    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            });
         } else {
             dispatch_async(networkQueue, ^{
                 @autoreleasepool {
