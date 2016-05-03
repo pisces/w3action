@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		193DF752645542CC53C0BA42 /* libPods-w3action_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF79AF1AC093C22761DF445 /* libPods-w3action_Example.a */; };
-		2344A39C1CD36C5800623DAF /* example.json in Resources */ = {isa = PBXBuildFile; fileRef = 2344A3991CD36C5800623DAF /* example.json */; };
-		2344A39D1CD36C5800623DAF /* example.text in Sources */ = {isa = PBXBuildFile; fileRef = 2344A39A1CD36C5800623DAF /* example.text */; };
-		2344A39F1CD36C6D00623DAF /* example.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2344A39E1CD36C6D00623DAF /* example.xml */; };
 		2344A3A11CD36DDF00623DAF /* action.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2344A3A01CD36DDF00623DAF /* action.plist */; };
 		2344A3A31CD36E5500623DAF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2344A3A21CD36E5500623DAF /* LaunchScreen.storyboard */; };
 		2344A3A61CD37C9300623DAF /* DemoActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2344A3A51CD37C9300623DAF /* DemoActionViewController.m */; };
@@ -44,9 +41,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2344A3991CD36C5800623DAF /* example.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = example.json; sourceTree = "<group>"; };
-		2344A39A1CD36C5800623DAF /* example.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = example.text; sourceTree = "<group>"; };
-		2344A39E1CD36C6D00623DAF /* example.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = example.xml; sourceTree = "<group>"; };
 		2344A3A01CD36DDF00623DAF /* action.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = action.plist; sourceTree = "<group>"; };
 		2344A3A21CD36E5500623DAF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2344A3A41CD37C9300623DAF /* DemoActionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoActionViewController.h; sourceTree = "<group>"; };
@@ -157,9 +151,6 @@
 				2344A3A81CD37E1100623DAF /* DemoActionView.xib */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				2344A3A01CD36DDF00623DAF /* action.plist */,
-				2344A3991CD36C5800623DAF /* example.json */,
-				2344A39A1CD36C5800623DAF /* example.text */,
-				2344A39E1CD36C6D00623DAF /* example.xml */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
 			name = "Example for w3action";
@@ -300,12 +291,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2344A39F1CD36C6D00623DAF /* example.xml in Resources */,
 				2344A3A91CD37E1100623DAF /* DemoActionView.xib in Resources */,
 				2344A3A31CD36E5500623DAF /* LaunchScreen.storyboard in Resources */,
 				2344A3A11CD36DDF00623DAF /* action.plist in Resources */,
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
-				2344A39C1CD36C5800623DAF /* example.json in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
@@ -422,7 +411,6 @@
 				6003F59E195388D20070C39A /* DemoAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* DemoViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				2344A39D1CD36C5800623DAF /* example.text in Sources */,
 				2344A3A61CD37C9300623DAF /* DemoActionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
