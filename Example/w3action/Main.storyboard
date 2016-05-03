@@ -8,7 +8,6 @@
         <!--Select Action-->
         <scene sceneID="72w-Ip-t9s">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="UyG-yD-b16" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="xCa-Sp-D7i" userLabel="Select Action" customClass="DemoViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="WDo-9a-IDx">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -21,6 +20,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Root View Controller" id="98U-FA-CZY"/>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UyG-yD-b16" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="377" y="423"/>
         </scene>
