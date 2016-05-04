@@ -17,6 +17,8 @@
 		1720F925CB772A1C0DA3123947754A98 /* APDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C7C75F98593BBC8AD2867D1791369A3 /* APDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1939B31126A794FD2354B4341EF55659 /* HTTPRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 35AA275A64469F7695CE4CB74799E231 /* HTTPRequestObject.m */; };
 		1C7B5A3C90171CA78654CAF79C3A256A /* w3action-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D7DB1082D3EA62BB7370C703124000 /* w3action-dummy.m */; };
+		2367B11A1CDA070D0025CA9E /* NSData+w3action.h in Headers */ = {isa = PBXBuildFile; fileRef = 2367B1181CDA070D0025CA9E /* NSData+w3action.h */; };
+		2367B11B1CDA070D0025CA9E /* NSData+w3action.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367B1191CDA070D0025CA9E /* NSData+w3action.m */; };
 		2385BD168B05673134EF8467F86416EE /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5055BBE7CD1F4177EC80509E630AE198 /* DBManager.m */; };
 		23E96C61A1CB8503538709EFC8BF6156 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C173225E716F86F12C2AA706925508E8 /* Foundation.framework */; };
 		26F829E138C4D476DC0C0F975B5A1A3E /* HTTPActionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F90D5BB7D89D74918E250E63273DC5 /* HTTPActionManager.m */; };
@@ -44,9 +46,7 @@
 		76FD1A051F7586F622720D3D537957BF /* NSURL+PSFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E4DD93EA380AA526CA84B72FEA6757F /* NSURL+PSFoundation.m */; };
 		776ADFB15C75877FD2BD06C75008B963 /* PSFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 780A0A697BD67ACCF4F87024890F62D9 /* PSFoundation.m */; };
 		7AEB66841389085D3F3867BF8C5AE505 /* NSDate+PSFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = FE0060DD5B51D114E2A30A33E888E3F3 /* NSDate+PSFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7C5A145A9F0729E2FE181A923CBCC5E7 /* NSData+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FFAFBAE1CF539E9B990FACE32FEF97C4 /* NSData+Extensions.m */; };
 		840B57A60B6D3BFEAA0EFF7CE2317D1A /* NSString+w3action.m in Sources */ = {isa = PBXBuildFile; fileRef = D23EBF11971E47033572AF05E1AB3240 /* NSString+w3action.m */; };
-		844217A03591AA2BA944C05BEF0B132A /* NSData+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F5D710F35095284B3002B2BC6AC1CE7 /* NSData+Extensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87F0CC4E45444BBC60C9BEAAEAAFC7B4 /* apxml-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C4B250649284802F3F82964BD3E8665F /* apxml-dummy.m */; };
 		8A5C5ACF02DF455C84A8B553C4999107 /* NSData+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D82193EA051A18BADBE30921F07A562 /* NSData+MD5.m */; };
 		8B3CEE217AE31203E98CB70FC93ECD56 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C173225E716F86F12C2AA706925508E8 /* Foundation.framework */; };
@@ -148,7 +148,6 @@
 		02E7B182FB433FF7655CAABCFEB09B86 /* PSFoundation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PSFoundation.h; path = PSFoundation/Classes/PSFoundation.h; sourceTree = "<group>"; };
 		098CB670C60FC07D2C72AAB175EFB4CF /* PSFoundation-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PSFoundation-prefix.pch"; sourceTree = "<group>"; };
 		0F0DA04DC3A2B276BF026E6FD4C427AC /* ext.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ext.h; path = PSFoundation/Classes/ext.h; sourceTree = "<group>"; };
-		0F5D710F35095284B3002B2BC6AC1CE7 /* NSData+Extensions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSData+Extensions.h"; sourceTree = "<group>"; };
 		12D7DB1082D3EA62BB7370C703124000 /* w3action-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "w3action-dummy.m"; sourceTree = "<group>"; };
 		150532A43195F770A252B2CDBC197062 /* NSURLRequest+PSFoundation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSURLRequest+PSFoundation.h"; path = "PSFoundation/Classes/NSURLRequest+PSFoundation.h"; sourceTree = "<group>"; };
 		18BB428B1C47A726A6935825FCE93FAD /* NSBundle+PSFoundation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSBundle+PSFoundation.h"; path = "PSFoundation/Classes/NSBundle+PSFoundation.h"; sourceTree = "<group>"; };
@@ -160,6 +159,8 @@
 		1D82193EA051A18BADBE30921F07A562 /* NSData+MD5.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSData+MD5.m"; path = "PSFoundation/Classes/NSData+MD5.m"; sourceTree = "<group>"; };
 		206DED1D0AB881B49183186BC3904E30 /* Pods-w3action_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-w3action_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		2331F5C793D73794FDD7539D99DD8FB9 /* APElement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = APElement.m; sourceTree = "<group>"; };
+		2367B1181CDA070D0025CA9E /* NSData+w3action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+w3action.h"; sourceTree = "<group>"; };
+		2367B1191CDA070D0025CA9E /* NSData+w3action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+w3action.m"; sourceTree = "<group>"; };
 		258C3754424228F403E6D94E633B255E /* BaseObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BaseObject.h; path = PSFoundation/Classes/BaseObject.h; sourceTree = "<group>"; };
 		27DB42B76EA6B965548E67A39F963C8A /* PSFoundation-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PSFoundation-dummy.m"; sourceTree = "<group>"; };
 		2B757AC600CA5CC84CC774027F4A4CB8 /* APXML.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = APXML.h; sourceTree = "<group>"; };
@@ -232,7 +233,6 @@
 		FAD46084A5365593EC4F19305175741B /* APDocument.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = APDocument.m; sourceTree = "<group>"; };
 		FE0060DD5B51D114E2A30A33E888E3F3 /* NSDate+PSFoundation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDate+PSFoundation.h"; path = "PSFoundation/Classes/NSDate+PSFoundation.h"; sourceTree = "<group>"; };
 		FF536E13312669E60C9177007DE99D09 /* NSFileManager+PSFoundation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+PSFoundation.m"; path = "PSFoundation/Classes/NSFileManager+PSFoundation.m"; sourceTree = "<group>"; };
-		FFAFBAE1CF539E9B990FACE32FEF97C4 /* NSData+Extensions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NSData+Extensions.m"; sourceTree = "<group>"; };
 		FFE9053DF7DA0CB33CD82C4444A2DBB0 /* APAttribute.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = APAttribute.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -462,8 +462,8 @@
 				46F90D5BB7D89D74918E250E63273DC5 /* HTTPActionManager.m */,
 				4EF86BAE91222C7A21446976F9423F65 /* HTTPRequestObject.h */,
 				35AA275A64469F7695CE4CB74799E231 /* HTTPRequestObject.m */,
-				0F5D710F35095284B3002B2BC6AC1CE7 /* NSData+Extensions.h */,
-				FFAFBAE1CF539E9B990FACE32FEF97C4 /* NSData+Extensions.m */,
+				2367B1181CDA070D0025CA9E /* NSData+w3action.h */,
+				2367B1191CDA070D0025CA9E /* NSData+w3action.m */,
 				65BEE65DC12FC88139619BDBF45E5447 /* NSDictionary+w3action.h */,
 				1A321FA5C17E970C6B79D7ACA2CE8088 /* NSDictionary+w3action.m */,
 				7DEED4D3DEC42D56B58F0D4D61746026 /* NSString+w3action.h */,
@@ -535,7 +535,7 @@
 			files = (
 				4ABFE08B09245C8409AEB1A5A77AC8A4 /* HTTPActionManager.h in Headers */,
 				D213CF9924EF0D0FD16EEFDC05AAFFDA /* HTTPRequestObject.h in Headers */,
-				844217A03591AA2BA944C05BEF0B132A /* NSData+Extensions.h in Headers */,
+				2367B11A1CDA070D0025CA9E /* NSData+w3action.h in Headers */,
 				367CD08528963CACF75F7A724F89EBCE /* NSDictionary+w3action.h in Headers */,
 				6E4637B06F5BD9146BF90F46DAC81CEE /* NSString+w3action.h in Headers */,
 				E8128863A450F0B18F1AC92B55F6E518 /* w3action.h in Headers */,
@@ -792,7 +792,7 @@
 			files = (
 				26F829E138C4D476DC0C0F975B5A1A3E /* HTTPActionManager.m in Sources */,
 				1939B31126A794FD2354B4341EF55659 /* HTTPRequestObject.m in Sources */,
-				7C5A145A9F0729E2FE181A923CBCC5E7 /* NSData+Extensions.m in Sources */,
+				2367B11B1CDA070D0025CA9E /* NSData+w3action.m in Sources */,
 				6B646122DBCE21658C7C73C2DFAD02A0 /* NSDictionary+w3action.m in Sources */,
 				840B57A60B6D3BFEAA0EFF7CE2317D1A /* NSString+w3action.m in Sources */,
 				1C7B5A3C90171CA78654CAF79C3A256A /* w3action-dummy.m in Sources */,
