@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "w3action"
-  s.version          = "1.3.0"
+  s.version          = "1.3.1"
   s.summary          = "w3action."
 
 # This description is used to generate tags and improve search results.
@@ -36,4 +36,7 @@ Pod::Spec.new do |s|
   s.dependency 'PSFoundation'
   s.dependency 'apxml'
   
+  s.xcconfig = {
+    'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES'
+  }
 end
