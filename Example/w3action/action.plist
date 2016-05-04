@@ -7,7 +7,7 @@
 		<key>example-datatype-json</key>
 		<dict>
 			<key>url</key>
-			<string>https://raw.github.com/pisces/w3action/1.3.1/w3action/etc/example.json</string>
+			<string>https://raw.github.com/pisces/w3action/master/etc/example.json</string>
 			<key>method</key>
 			<string>GET</string>
 			<key>contentType</key>
@@ -22,7 +22,7 @@
 		<key>example-datatype-xml</key>
 		<dict>
 			<key>url</key>
-			<string>https://raw.github.com/pisces/w3action/1.3.1/w3action/etc/example.xml</string>
+			<string>https://raw.github.com/pisces/w3action/master/etc/example.xml</string>
 			<key>method</key>
 			<string>GET</string>
 			<key>contentType</key>
@@ -37,7 +37,7 @@
 		<key>example-datatype-text</key>
 		<dict>
 			<key>url</key>
-			<string>https://raw.github.com/pisces/w3action/1.3.1/w3action/etc/example.text</string>
+			<string>https://raw.github.com/pisces/w3action/master/etc/example.text</string>
 			<key>method</key>
 			<string>GET</string>
 			<key>contentType</key>
@@ -67,7 +67,7 @@
 		<key>example-path-param</key>
 		<dict>
 			<key>url</key>
-			<string>https://raw.github.com/pisces/w3action/master/w3action/{resourceFolderName}/example.json</string>
+			<string>https://raw.github.com/pisces/w3action/master/{resourceFolderName}/example.json</string>
 			<key>method</key>
 			<string>GET</string>
 			<key>contentType</key>

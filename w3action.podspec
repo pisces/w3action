@@ -35,8 +35,4 @@ Pod::Spec.new do |s|
   s.frameworks = 'CFNetwork'
   s.dependency 'PSFoundation'
   s.dependency 'apxml'
-  
-  s.xcconfig = {
-    'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES'
-  }
 end
