@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '8611883C0CFF68F7C43EC48E'
-               BlueprintName = 'w3action'
+               BlueprintIdentifier = '5A0D64DB3E9407A190D67FFF'
+               BlueprintName = 'apxml'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'libw3action.a'>
+               BuildableName = 'libapxml.a'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

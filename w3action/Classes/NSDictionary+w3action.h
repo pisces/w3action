@@ -10,4 +10,6 @@
 
 @interface NSDictionary (w3action_NSDictionary)
 - (NSString *)JSONString;
+- (NSString * _Nullable)urlEncodedString;
+- (NSString * _Nullable)urlString;
 @end
