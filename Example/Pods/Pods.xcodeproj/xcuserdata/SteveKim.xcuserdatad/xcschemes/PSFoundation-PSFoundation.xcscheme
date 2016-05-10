@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '8611883C0CFF68F7C43EC48E'
-               BlueprintName = 'w3action'
+               BlueprintIdentifier = '1581086CF9AE89F5BB4F05A7'
+               BlueprintName = 'PSFoundation-PSFoundation'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'libw3action.a'>
+               BuildableName = 'PSFoundation.bundle'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

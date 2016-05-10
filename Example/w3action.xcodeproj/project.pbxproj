@@ -221,6 +221,7 @@
 				6003F588195388D20070C39A /* Resources */,
 				D2F4D1C555E533A3FB42494E /* 📦 Embed Pods Frameworks */,
 				16F15B382C678404ACFB7EFE /* 📦 Copy Pods Resources */,
+				5C536A4E068EBB42D7C2E930 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -241,6 +242,7 @@
 				6003F5AC195388D20070C39A /* Resources */,
 				4527B1729981B9ED9AFC8511 /* 📦 Embed Pods Frameworks */,
 				9E1803A3A17DB8DFFFF5B966 /* 📦 Copy Pods Resources */,
+				657AA312561DD6F40C13499C /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -262,6 +264,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = pisces;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = V33SDJ95G6;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -354,6 +359,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		5C536A4E068EBB42D7C2E930 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-w3action_Example/Pods-w3action_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		657AA312561DD6F40C13499C /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-w3action_Tests/Pods-w3action_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9E1803A3A17DB8DFFFF5B966 /* 📦 Copy Pods Resources */ = {
@@ -533,6 +568,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "w3action/w3action-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -558,6 +594,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "w3action/w3action-Prefix.pch";
 				HEADER_SEARCH_PATHS = (

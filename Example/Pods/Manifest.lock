@@ -1,7 +1,7 @@
 PODS:
   - apxml (1.0)
-  - PSFoundation (1.0.1)
-  - w3action (1.3.1):
+  - PSFoundation (1.0.2)
+  - w3action (1.3.2):
     - apxml
     - PSFoundation
 
@@ -10,13 +10,11 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   w3action:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
   apxml: 0930b839c8be6734f5091f8c8889b00f7d59559c
-  PSFoundation: b4e25f6d7bca5169af24c34163d8341d27a22134
-  w3action: a6e197dba59f83c81f988094ddabf6032a1a328a
+  PSFoundation: b698a314bcdc0d78a33fb15faf86b21614bf704e
+  w3action: d37e72919b458b15d9e89d04278fae672f58c877
 
-PODFILE CHECKSUM: ede691377b0e5b0923246a848b97438e4494b545
-
-COCOAPODS: 1.0.0.beta.8
+COCOAPODS: 0.39.0

@@ -21,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"Select Demo";
+    self.title = @"w3action Demo App";
     cellTexts = @[@"Data Type JSON",
                   @"Data Type XML",
                   @"Data Type Text"];
