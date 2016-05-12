@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '9350DB4B280177E9B63394C2EB9A06AD'
-               BlueprintName = 'apxml'
+               BlueprintIdentifier = '01BD670D4CBF2F97456C29EB01EDF7A5'
+               BlueprintName = 'apxml-iOS7.0'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'libapxml.a'>
+               BuildableName = 'libapxml-iOS7.0.a'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

@@ -17,7 +17,7 @@
 			<key>timeout</key>
 			<string>10</string>
 			<key>async</key>
-			<true/>
+			<false/>
 		</dict>
 		<key>example-datatype-xml</key>
 		<dict>
