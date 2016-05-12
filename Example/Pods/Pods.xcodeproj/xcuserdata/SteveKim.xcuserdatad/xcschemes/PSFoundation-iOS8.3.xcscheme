@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '5A0D64DB3E9407A190D67FFF'
-               BlueprintName = 'apxml'
+               BlueprintIdentifier = '978FA616211D8CDF4E8ED6D86B421CD8'
+               BlueprintName = 'PSFoundation-iOS8.3'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'libapxml.a'>
+               BuildableName = 'libPSFoundation-iOS8.3.a'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

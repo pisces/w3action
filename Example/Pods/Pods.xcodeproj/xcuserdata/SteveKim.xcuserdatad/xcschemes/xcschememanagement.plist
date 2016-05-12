@@ -4,12 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>PSFoundation-PSFoundation.xcscheme</key>
+		<key>PSFoundation-iOS7.0-PSFoundation.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>PSFoundation.xcscheme</key>
+		<key>PSFoundation-iOS7.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>PSFoundation-iOS8.3-PSFoundation.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>PSFoundation-iOS8.3.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -24,12 +34,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>apxml.xcscheme</key>
+		<key>apxml-iOS7.0.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>w3action.xcscheme</key>
+		<key>apxml-iOS8.3.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>w3action-iOS7.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>w3action-iOS8.3.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -37,32 +57,52 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0567FBEF672A26E03A230FA293A54920</key>
+		<key>0004CB4FA5C26103876DFDA4D1F6A026</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>192891D6B0456EC3D372A6D1578934E8</key>
+		<key>01BD670D4CBF2F97456C29EB01EDF7A5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2C2E1F2CD3D1713E9C1F0329699B526E</key>
+		<key>02976C479F0E18F4A79FFB408FE04EE0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>53A71DE6993D393E9B0F4110501DF3A6</key>
+		<key>05D8999A4B8D2EB11125974BD9F25EEB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8B2A7514733D3920C2873D0B9F2A4C0D</key>
+		<key>17BBAF548048635CE5C90757A4FA5974</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9350DB4B280177E9B63394C2EB9A06AD</key>
+		<key>266912331D195DD4D6B7328110E65A1D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>293CB9507CAFDAB5B7840F4F51BB5479</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6B2DFF74A13A37D3E5245258354E6E1C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>978FA616211D8CDF4E8ED6D86B421CD8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D321531E3A795995CB304AE1DC2A3D67</key>
 		<dict>
 			<key>primary</key>
 			<true/>

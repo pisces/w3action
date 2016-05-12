@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '6278AC1671BD838E339379C6'
-               BlueprintName = 'PSFoundation'
+               BlueprintIdentifier = 'D321531E3A795995CB304AE1DC2A3D67'
+               BlueprintName = 'PSFoundation-iOS8.3-PSFoundation'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'libPSFoundation.a'>
+               BuildableName = 'PSFoundation.bundle'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
