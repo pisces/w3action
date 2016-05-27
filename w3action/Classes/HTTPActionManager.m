@@ -434,8 +434,11 @@ NSString *const MultipartFormDataBoundary = @"0xKhTmLbOuNdArY";
     NSString *method = [object.action objectForKey:HTTPActionMethodKey];
     NSString *urlString = [self recursiveReplaceURLString:[object.action objectForKey:HTTPActionURLKey] object:object];
     
-    if ([method isEqualToString:HTTPRequestMethodGet] && object.param && object.param.count > 0)
-        urlString = [urlString stringByAppendingFormat:@"?%@", object.paramString];
+    if ([method isEqualToString:HTTPRequestMethodGet] && object.param && object.param.count > 0) {
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.*)?(.*)" options:0 error:nil];
+        NSTextCheckingResult *matche = [regex firstMatchInString:urlString options:0 range:(NSRange) {0, urlString.length}];
+        urlString = [urlString stringByAppendingFormat:@"%@%@", matche ? @"&" : @"?", object.paramString];
+    }
     
     return [NSURL URLWithString:urlString];
 }
