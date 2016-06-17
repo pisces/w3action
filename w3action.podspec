@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "w3action"
-  s.version          = "1.3.4"
+  s.version          = "1.3.5"
   s.summary          = "w3action."
 
 # This description is used to generate tags and improve search results.
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '7.0'
+  s.ios.deployment_target = '8.0'
   s.requires_arc = true
   s.source_files = 'w3action/Classes/*.{m,h}'
 

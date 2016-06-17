@@ -1,3 +1,5 @@
+use_frameworks!
+
 target 'w3action_Example' do
   pod 'w3action', :path => '../'
 end
