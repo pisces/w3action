@@ -223,21 +223,18 @@ NSString *const MultipartFormDataBoundary = @"0xKhTmLbOuNdArY";
 
 - (void)doRequest:(HTTPRequestObject *)object
 {
-    dispatch_async(networkQueue, ^(void){
-        NSURLRequest *request = [self requestWithObject:object];
-        id asyncOption = [object.action objectForKey:HTTPActionAsyncKey];
-        BOOL async = asyncOption ? [asyncOption boolValue] : _async;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.useNetworkActivityIndicator)
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-            
-            if (async)
-                [self sendAsynchronousRequest:request withObject:object];
-            else
-                [self sendSynchronousRequest:request withObject:object];
-        });
-    });
+    NSURLRequest *request = [self requestWithObject:object];
+    id asyncOption = [object.action objectForKey:HTTPActionAsyncKey];
+    BOOL async = asyncOption ? [asyncOption boolValue] : _async;
+    
+    if (self.useNetworkActivityIndicator)
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    if (async) {
+        [self sendAsynchronousRequest:request withObject:object];
+    } else {
+        [self sendSynchronousRequest:request withObject:object];
+    }
 #if DEBUG
     NSLog(@"Request End -----------------------------------------");
 #endif
